@@ -34,6 +34,13 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    // TestFairy
+    compile 'com.testfairy:testfairy-android-sdk:1.+@aar'
+
+
+
+
     compile(name: 'AfariaProvider-3.15.0', ext: 'aar')
     compile(name: 'android-database-sqlcipher-3.5.6', ext: 'aar')
     compile(name: 'Cache-3.15.0', ext: 'aar')
@@ -88,6 +95,7 @@ dependencies {
     compile 'com.kyanogen.signatureview:signature-view:1.2'
     compile 'com.android.support:support-v4:25.1.1'
     compile files ('libs/gson-2.2.4.jar')
+
 
 
     testCompile 'junit:junit:4.12'
