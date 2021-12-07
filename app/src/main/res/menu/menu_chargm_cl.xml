@@ -1,0 +1,17 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+    <item
+        android:id="@+id/menu_chargm_cl"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_synn"
+        android:showAsAction="always"
+        android:title="Charger la liste des clients"
+        android:visible="true"
+        app:showAsAction="always"
+        tools:ignore="AppCompatResource" />
+
+</menu>

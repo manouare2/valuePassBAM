@@ -1,0 +1,154 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wall"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:background="@drawable/wall">
+
+        <RelativeLayout
+            android:layout_width="314dp"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/DefaultTextLabels"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+        <Button
+            android:id="@+id/scan"
+            android:layout_width="67dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ic_action_add"
+            />
+
+
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/envoiliste"
+        android:layout_width="fill_parent"
+        android:layout_height="225dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+
+        android:dividerHeight="10dp"
+        android:layout_weight="0.77"
+        android:drawSelectorOnTop="true">
+    </ListView>
+
+    <TextView
+        android:id="@+id/code2D"
+        android:layout_width="165dp"
+        android:layout_height="23dp"
+
+        android:layout_below="@+id/envoiliste"
+
+        android:layout_marginEnd="1dp"
+        android:text="@string/code2D"
+
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
+
+
+
+
+
+        <EditText
+            android:id="@+id/nombre"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="15dp"
+            android:hint="Saisir nombre envois"
+            android:textColor="@color/DefaultTextLabels"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/txt"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp" />
+
+
+        <TextView
+            android:id="@+id/txt"
+            android:text="Controle 2D"
+            android:layout_width="73dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/sap_uex_black"
+            android:textSize="17sp"
+            android:textStyle="bold"
+
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/qr"
+            android:layout_alignParentEnd="true" />
+
+        <ImageButton
+            android:id="@+id/qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/DefaultTextLabels"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/qrr"
+            android:layout_below="@+id/txt" />
+
+
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
+    <Button
+        android:id="@+id/validerr"
+        android:layout_width="153dp"
+        android:layout_height="31dp"
+        android:layout_weight="0.14"
+        android:background="#ffdd00"
+        android:text="Valider"
+        android:textColor="@color/DefaultTextLabels"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/suite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/ic_action_suite"
+        />
+
+</RelativeLayout>
+
+</LinearLayout>

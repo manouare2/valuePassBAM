@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wall"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:background="@drawable/wall">
+
+        <RelativeLayout
+            android:layout_width="314dp"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/DefaultTextLabels"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+        <Button
+            android:id="@+id/btn_show_search"
+            android:layout_width="67dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ic_sc"
+            />
+
+
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/agencies_list"
+        android:layout_width="fill_parent"
+        android:layout_height="225dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+
+        android:dividerHeight="10dp"
+        android:layout_weight="0.77"
+        android:drawSelectorOnTop="true">
+    </ListView>
+
+
+    <RadioGroup
+        android:id="@+id/rdg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.23"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+
+            android:text="Ajouter" />
+
+
+    </RadioGroup>
+
+
+    <!--  <Button
+          android:id="@+id/btn"
+          android:layout_width="234dp"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="22dp"
+          android:layout_marginLeft="22dp"
+          android:layout_marginRight="5dp"
+          android:layout_marginTop="22dp"
+          android:background="#ffdd00"
+          android:drawableStart="@drawable/ic_liv"
+          android:text="livraison"
+          android:textAllCaps="false"
+          android:textColor="@color/colorPrimaryDark"
+          android:textSize="18sp" />
+  -->
+
+
+
+
+
+</LinearLayout>

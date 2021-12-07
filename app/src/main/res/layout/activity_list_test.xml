@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wall"
+    android:orientation="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="ToggleButton"
+            android:textOff="En cours"
+            android:textOn="En cours"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="#ffdd00" />
+
+        <ListView
+            android:id="@+id/en_cours_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:dividerHeight="10dp"
+            android:visibility="gone">
+        </ListView>
+
+        <ToggleButton
+            android:id="@+id/toggleButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ToggleButton"
+            android:textOff="Livrés"
+            android:textOn="Livrés"
+            android:layout_margin="5dp"
+            android:background="#ffdd00"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <ListView
+            android:id="@+id/liv_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:dividerHeight="10dp"
+            android:visibility="gone">
+        </ListView>
+
+        <ToggleButton
+            android:id="@+id/toggleButton3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ToggleButton"
+            android:textOff="Non livrés"
+            android:textOn="Non livrés"
+            android:layout_margin="5dp"
+            android:background="#ffdd00"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <ListView
+            android:id="@+id/non_liv_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:dividerHeight="10dp"
+            android:visibility="gone">
+        </ListView>
+    </LinearLayout>
+
+
+</RelativeLayout>

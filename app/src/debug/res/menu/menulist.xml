@@ -1,0 +1,63 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+    <item
+        android:id="@+id/menu_item_scan"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_scn"
+        android:showAsAction="always"
+        android:title="créer DNL"
+        android:visible="true"
+        app:showAsAction="always"
+        tools:ignore="AppCompatResource" />
+
+    <item
+        android:id="@+id/menu_item_syn"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_synn"
+        android:showAsAction="always"
+        android:title="Charger DNL"
+        android:visible="true"
+        app:showAsAction="always"
+        tools:ignore="AppCompatResource" />
+
+    <item
+        android:id="@+id/menu_item_lot"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/lot"
+        android:showAsAction="always"
+        android:title="Traitement en LOT"
+        android:visible="true"
+        app:showAsAction="always"
+        tools:ignore="AppCompatResource" />
+    <item
+        android:id="@+id/menu_item_map"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_map"
+        android:showAsAction="always"
+        android:title="maps"
+        android:visible="true"
+        app:showAsAction="always"
+        tools:ignore="AppCompatResource" />
+
+
+    <item
+        android:id="@+id/menu_item_dec"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_name"
+        android:showAsAction="always"
+        android:title="Se déconnecter"
+        android:visible="true"
+        app:showAsAction="always"
+        tools:ignore="AppCompatResource" />
+
+
+
+</menu>

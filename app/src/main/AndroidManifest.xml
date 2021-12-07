@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.example.karim.applicationfacteur">
+
+
+        <uses-permission android:name="android.permission.INTERNET"/>
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+        <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+        <uses-permission android:name="android.permission.CLEAR_APP_CACHE"/>
+
+        <uses-permission android:name="android.permission.CAMERA"/>
+
+        <uses-feature android:name="android.hardware.camera"/>
+
+        <uses-feature android:name="android.hardware.camera.autofocus"/>
+
+        <uses-feature android:name="android.hardware.sensor.compass" android:required="true"/>
+
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+        <uses-permission android:name="android.permission.SEND_SMS"/>
+
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+      <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+
+      -<application android:name=".AgencyApplication" android:theme="@style/AppTheme" android:icon="@mipmap/ic_launcher" android:allowBackup="true">
+
+      <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBDSLveaXJsR_T1pPfG7H1Z2RlevYbLgoI"/>
+
+      <activity android:name=".ui.main.QRcode" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="CODE 2D">  </activity>
+
+      <activity android:name=".ui.main.MainActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="@string/app_name"/>
+
+      <activity android:name=".ui.main.myActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="@string/app_name"/>
+
+      <activity android:name=".ui.main.Testt" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="CODE 2D"> </activity>
+
+
+      -<activity android:name=".ui.main.SplashScreen" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Facteur">
+      -<intent-filter>
+
+      <action android:name="android.intent.action.MAIN"/>
+
+      <category android:name="android.intent.category.LAUNCHER"/>
+
+  </intent-filter>
+
+  </activity>
+
+
+
+  <receiver android:name=".ui.main.ActionReceiver"></receiver>
+      <activity android:name=".ui.main.Loading" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Raison"> </activity>
+
+      <activity android:name=".ui.main.Loading1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Accueil"> </activity>
+
+      <activity android:name=".ui.main.LogonActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Authentification"> </activity>
+
+      <activity android:name=".ui.main.Deconnexion" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Authentification"/>
+
+      <activity android:name=".ui.online.AgencyListActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="@string/app_name"/>
+
+      <activity android:name=".ui.online.AgencyActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="@string/app_name"/>
+
+      <activity android:name=".ui.main.Journee" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Ma journée"/>
+
+      <activity android:name=".ui.online.AgencyActivity1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Détails Article"/>
+
+      <activity android:name=".ui.online.AgencyActivity2" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Détails Article"/>
+
+      <activity android:name=".ui.main.Scann" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Créer DNL"/>
+
+      <activity android:name=".ui.main.Scanpda" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Créer DNL"/>
+
+      <activity android:name=".ui.main.Scann3" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Vérification envoi"/>
+
+      <activity android:name=".ui.main.Scann2" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Traiter lot"/>
+
+      <activity android:name=".ui.online.AgencyListActivity1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="DNL"/>
+
+      <activity android:name=".ui.main.Acceuil" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Acceuil"/>
+
+      <activity android:name=".ui.main.Acceuil1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Accueil"/>
+
+      <activity android:name=".ui.main.Livraison_entrep" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Livraison entreprise"/>
+
+      <activity android:name=".ui.main.Livraison_part" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Livraison particulier"/>
+
+      <activity android:name=".ui.main.Livraison_entrep1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Livraison entreprise"/>
+
+      <activity android:name=".ui.main.Livraison_part1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Livraison particulier"/>
+
+      <activity android:name=".ui.online.AgencyListActivity2" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="List Envoi"/>
+
+      <activity android:name=".ui.main.Raison" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Raison"/>
+
+      <activity android:name=".ui.main.Raison1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Raison"/>
+
+     <activity android:name=".ui.main.MapsActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="List Envoi"/>
+
+  <activity android:name=".ui.online.Scangrp" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="DNL"/>
+  <activity android:name=".ui.main.Avise" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Avisé"/>
+
+  <activity android:name=".ui.main.Avise1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Avisé"/>
+
+  -<activity android:name=".ui.main.SignatureActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Facteur"/>
+
+
+
+  <activity android:name=".ui.online.CollecteListActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Feuille de route"/>
+      <activity android:name=".ui.online.CollecteActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Detail Collecte"/>
+      <activity android:name=".ui.online.CollecteTraitmActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label=""/>
+      <activity android:name=".ui.main.CreerCollecte" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Creation de la collecte"/>
+      <activity android:name=".ui.main.QRcollecte" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="CODE 2D"/>
+      <activity android:name=".ui.main.QRcollecelist" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="CODE 2D"> </activity>
+      <activity android:name=".ui.main.QRcollecte1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="CODE 2D"/>
+      <activity android:name=".ui.online.QRcollectelist1" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Controle 2D"/>
+      <activity android:name=".ui.main.Motif_CL" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="Collecte Non Traité"/>
+      <activity android:name=".ui.online.QRcollecteliv" android:screenOrientation="portrait" android:configChanges="orientation|screenSize" android:label="2D"/>
+
+
+
+
+
+
+</application>
+
+
+
+
+
+  </manifest>

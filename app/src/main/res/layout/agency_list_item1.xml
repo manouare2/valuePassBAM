@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
+
+
+        <TextView
+            android:id="@+id/agency_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/desc_agency_location"
+            android:textColor="@color/DefaultTextContent"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/agency_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="envoi"
+            android:textSize="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:layout_below="@+id/agency_location" />
+
+        <ImageButton
+            android:id="@+id/agency_id"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/agency_name"
+            android:layout_alignParentEnd="true"
+            android:accessibilityLiveRegion="none"
+            android:background="@drawable/ic_dele"
+
+            android:text="Supprimer"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/agency_location" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

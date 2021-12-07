@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:weightSum="1">
+
+    <RelativeLayout
+        android:layout_width="291dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@+id/ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="numéro FDR"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/DefaultTextLabels"
+            android:textSize="20dp" />
+
+        >
+
+        <TextView
+            android:id="@+id/client"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="client"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15dp"
+            android:layout_below="@+id/ID"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/envoi" />
+
+        <TextView
+            android:id="@+id/envoi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15dp"
+            android:layout_alignBaseline="@+id/client"
+            android:layout_alignBottom="@+id/client"
+            android:layout_toEndOf="@+id/interlocuteur" />
+
+
+        <TextView
+            android:id="@+id/heure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginEnd="8dp"
+            android:text="heure"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/envoi" />
+
+
+        <TextView
+            android:id="@+id/interlocuteur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interlocuteur"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/ColorPrimaryDark"
+            android:textSize="10dp"
+            android:layout_toEndOf="@+id/tel"
+            android:layout_alignTop="@+id/inter" />
+
+
+        <TextView
+            android:id="@+id/inter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Interlocuteur:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/ColorPrimaryDark"
+            android:textSize="10dp"
+            android:layout_below="@+id/envoi"
+            android:layout_alignEnd="@+id/ID"
+            android:layout_marginTop="11dp" />
+
+        >
+
+
+        <TextView
+            android:id="@+id/telephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/interlocuteur"
+
+            android:text="Telephone"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/ColorPrimaryDark"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tel"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/inter"
+            android:text="Telephone    :"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/ColorPrimaryDark"
+            android:textSize="10dp" /><![CDATA[
+
+
+
+
+
+
+        >
+
+        >
+
+
+
+
+    ]]>
+    </RelativeLayout>
+
+
+</LinearLayout>

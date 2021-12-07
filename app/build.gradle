@@ -1,0 +1,95 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "26.0.0"
+    defaultConfig {
+        applicationId "com.example.karim.applicationfacteur"
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    aaptOptions {
+        cruncherEnabled = false
+    }
+}
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile(name: 'AfariaProvider-3.15.0', ext: 'aar')
+    compile(name: 'android-database-sqlcipher-3.5.6', ext: 'aar')
+    compile(name: 'Cache-3.15.0', ext: 'aar')
+    compile(name: 'CDSProvider-3.15.0', ext: 'aar')
+    compile(name: 'ClientHubSLL-3.15.0', ext: 'aar')
+    compile(name: 'ClientLog-3.15.0', ext: 'aar')
+    compile(name: 'Common-3.15.0', ext: 'aar')
+    compile(name: 'CommonCertificateProvider-3.15.0', ext: 'aar')
+    compile(name: 'Connectivity-3.15.0', ext: 'aar')
+    compile(name: 'CoreServices-3.15.0', ext: 'aar')
+    compile(name: 'DataVaultLib-3.15.0', ext: 'aar')
+    compile(name: 'E2ETrace-3.15.0', ext: 'aar')
+    compile(name: 'HttpConvAuthFlows-3.15.0', ext: 'aar')
+    compile(name: 'HttpConversation-3.15.0', ext: 'aar')
+    compile(name: 'MAFCalendar-3.15.0', ext: 'aar')
+    compile(name: 'MAFFormatters-3.15.0', ext: 'aar')
+    compile(name: 'MAFLocaleAwareControls-3.15.0', ext: 'aar')
+    compile(name: 'MAFLogger-3.15.0', ext: 'aar')
+    compile(name: 'MAFLogonCore-3.15.0', ext: 'aar')
+    compile(name: 'MAFLogonIMO-3.15.0', ext: 'aar')
+    compile(name: 'MAFLogonUI-3.15.0', ext: 'aar')
+    compile(name: 'MAFLogViewer-3.15.0', ext: 'aar')
+    compile(name: 'MAFSettingScreen-3.15.0', ext: 'aar')
+    compile(name: 'MAFTreeView-3.15.0', ext: 'aar')
+    compile(name: 'MAFUIComponents-3.15.0', ext: 'aar')
+    compile(name: 'MobilePlace-3.15.0', ext: 'aar')
+    compile(name: 'ODataAPI-3.15.0', ext: 'aar')
+    compile(name: 'ODataOnline-3.15.0', ext: 'aar')
+    compile(name: 'ODataV4OnlineCore-3.15.0', ext: 'aar')
+    compile(name: 'Parser-3.15.0', ext: 'aar')
+    compile(name: 'Persistence-3.15.0', ext: 'aar')
+    compile(name: 'Request-3.15.0', ext: 'aar')
+    compile(name: 'SupportabilityFacade-3.15.0', ext: 'aar')
+    compile(name: 'Usage-3.15.0', ext: 'aar')
+    compile(name: 'XscriptParser-3.15.0', ext: 'aar')
+    // dependency file for RecyclerView
+
+    // dependency file for CardView
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.google.android.gms:play-services-maps:11.0.4'
+    compile 'com.google.android.gms:play-services-location:11.0.4'
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'me.dm7.barcodescanner:zxing:1.9'
+    compile 'com.facebook.network.connectionclass:connectionclass:1.0.1'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.google.zxing:core:3.2.1'
+    compile 'com.google.maps.android:android-maps-utils:0.4+'
+    compile 'com.kyanogen.signatureview:signature-view:1.2'
+    compile 'com.android.support:support-v4:25.1.1'
+    compile files ('libs/gson-2.2.4.jar')
+
+
+    testCompile 'junit:junit:4.12'
+
+}

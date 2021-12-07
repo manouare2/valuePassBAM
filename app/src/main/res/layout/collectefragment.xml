@@ -1,0 +1,148 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wall"
+    android:orientation="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true">
+
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="#fff"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:id="@+id/relativeLayout2"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="-1dp">
+
+
+
+            <EditText
+                android:id="@+id/client"
+                android:layout_width="fill_parent"
+                android:layout_height="39dp"
+                android:drawableLeft="@drawable/ic_cl"
+                android:singleLine="true"
+                android:hint="Client"
+                android:textColor="@color/colorPrimaryDark"
+                />
+
+
+            <EditText
+                android:id="@+id/inter"
+                android:layout_width="fill_parent"
+                android:layout_height="39dp"
+                android:drawableLeft="@drawable/ic_action_per"
+
+                android:singleLine="true"
+                android:hint="Interlocuteur"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:paddingTop="5sp"
+                android:weightSum="1">
+                <EditText
+                    android:id="@+id/adr"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:drawableLeft="@drawable/ic_map"
+                    android:hint="Adresse"
+
+                    android:paddingTop="0sp"
+                    android:singleLine="true"
+
+                    />
+
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:paddingTop="5sp"
+                android:weightSum="1">
+                <EditText
+                    android:id="@+id/teleph"
+                    android:layout_width="match_parent"
+                    android:drawableLeft="@drawable/ic_cal"
+
+                    android:layout_height="30dp"
+                    android:paddingTop="0sp"
+                    android:singleLine="true"
+                    android:hint="Téléphone"
+
+                    />
+
+
+            </LinearLayout>
+
+
+            <RadioGroup
+                android:id="@+id/rdg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                >
+
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="98dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Traité" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Non Traité" />
+            </RadioGroup>
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="46dp">
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

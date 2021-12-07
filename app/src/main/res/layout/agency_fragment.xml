@@ -1,0 +1,262 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wall"
+    android:orientation="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true">
+
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="#fff"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:id="@+id/relativeLayout2"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="-1dp">
+
+
+
+            <EditText
+                android:id="@+id/code"
+                android:layout_width="fill_parent"
+                android:layout_height="39dp"
+                android:drawableLeft="@drawable/ic_cab"
+                android:singleLine="true"
+                android:hint="CAB"
+                android:textColor="@color/colorPrimaryDark"
+                />
+
+            <EditText
+                android:id="@+id/designation"
+                android:layout_width="fill_parent"
+                android:layout_height="39dp"
+                android:drawableLeft="@drawable/ic_action_des"
+
+                android:singleLine="true"
+                android:hint="Designation"
+                />
+
+
+            <EditText
+                android:id="@+id/des"
+                android:layout_width="fill_parent"
+                android:layout_height="39dp"
+                android:drawableLeft="@drawable/ic_action_per"
+
+                android:singleLine="true"
+                android:hint="Destinataire"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:paddingTop="5sp"
+                android:weightSum="1">
+                <EditText
+                    android:id="@+id/adr"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:drawableLeft="@drawable/ic_map"
+                    android:hint="Adresse"
+
+                    android:paddingTop="0sp"
+                    android:singleLine="true"
+
+                    />
+
+
+
+
+            </LinearLayout>
+
+
+
+            <EditText
+                android:id="@+id/relais"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+
+                android:paddingTop="0sp"
+                android:drawableLeft="@drawable/ic_rela"
+
+                android:singleLine="true"
+                android:hint="Point de relais"
+
+                ></EditText>
+
+
+
+            <EditText
+                android:id="@+id/adr_relais"
+                android:layout_width="match_parent"
+                android:drawableLeft="@drawable/ic_rel"
+                android:layout_height="30dp"
+                android:paddingTop="0sp"
+
+                android:singleLine="true"
+                android:hint="Adresse du point de ralais"
+
+                />
+
+
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:paddingTop="5sp"
+                android:weightSum="1">
+                <EditText
+                    android:id="@+id/telephh"
+                    android:layout_width="match_parent"
+                    android:drawableLeft="@drawable/ic_cal"
+
+                    android:layout_height="30dp"
+                    android:paddingTop="0sp"
+                    android:singleLine="true"
+                    android:hint="Téléphone_destinataire"
+
+                    />
+
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:paddingTop="0sp"
+                android:weightSum="1">
+
+
+                <EditText
+                    android:id="@+id/teleph"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:paddingTop="0sp"
+                    android:drawableLeft="@drawable/ic_action_phn"
+
+                    android:hint="Téléphone_expéditeur"
+                    android:singleLine="true"
+
+                    />
+
+
+
+            </LinearLayout>
+
+
+
+
+
+
+
+
+            <EditText
+                android:id="@+id/servcie"
+                android:layout_width="fill_parent"
+                android:drawableLeft="@drawable/ic_action_service"
+
+                android:singleLine="true"
+                android:layout_height="30dp"
+                android:paddingTop="0sp"
+                android:hint="Service crbt"
+                />
+
+            <EditText
+                android:id="@+id/crbt"
+                android:layout_width="fill_parent"
+                android:drawableLeft="@drawable/ic_money"
+                android:layout_height="30dp"
+                android:paddingTop="0sp"
+
+                android:singleLine="true"
+                android:hint="Montant crbt"
+                />
+
+
+
+            <EditText
+                android:id="@+id/POD"
+                android:layout_width="fill_parent"
+                android:drawableLeft="@drawable/lot"
+                android:layout_height="30dp"
+                android:paddingTop="0sp"
+
+                android:singleLine="true"
+                android:hint="POD"
+                />
+
+
+
+            <RadioGroup
+                android:id="@+id/rdg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                >
+
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="98dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Livré" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Non livré" />
+            </RadioGroup>
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="46dp">
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
