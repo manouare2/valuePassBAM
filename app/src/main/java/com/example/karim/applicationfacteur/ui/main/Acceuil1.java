@@ -110,11 +110,8 @@ public class Acceuil1 extends MainCL {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acceuil1);
 
-
-        btn= (Button) findViewById(R.id.btn);
-        btn2= (Button) findViewById(R.id.btn2);
-        txt1= (EditText) findViewById(R.id.txt1);
-        txt2= (EditText) findViewById(R.id.txt2);
+        this.inflateViews();
+        this.initListeners();
         session = new SessionManager(this);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
@@ -139,9 +136,14 @@ public class Acceuil1 extends MainCL {
 
         txt2.setText("Envois : " + siz );
         txt2.setFocusable(false);*/
+
+        //  Toast.makeText(getApplicationContext(),session.getUsername(),Toast.LENGTH_LONG).show();
+
+
+    }
+
+    private void initListeners() {
         btn.setOnClickListener(new View.OnClickListener() {
-
-
 
             public void onClick(View view) {
                 btn.setTextColor(Color.WHITE);
@@ -245,7 +247,7 @@ public class Acceuil1 extends MainCL {
 
 
 
-            ///////////////////////////////// traitm  /////////////////////////////////////
+                ///////////////////////////////// traitm  /////////////////////////////////////
 /*
                 db = new SQLiteHandler(getApplicationContext());
 
@@ -434,9 +436,14 @@ public class Acceuil1 extends MainCL {
 
         });
 
-        //  Toast.makeText(getApplicationContext(),session.getUsername(),Toast.LENGTH_LONG).show();
+    }
 
 
+    private void inflateViews() {
+        btn= (Button) findViewById(R.id.btn);
+        btn2= (Button) findViewById(R.id.btn2);
+        txt1= (EditText) findViewById(R.id.txt1);
+        txt2= (EditText) findViewById(R.id.txt2);
     }
 
     /*@Override

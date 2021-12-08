@@ -39,7 +39,7 @@ import java.net.URL;
  * Created by karim on 12/06/2018.
  */
 
-public class LogonActivity extends myActivity{
+public class LogonActivity extends myActivity {
 
 
     private final String TAG = LogonActivity.class.getSimpleName();
@@ -52,7 +52,7 @@ public class LogonActivity extends myActivity{
     private ProgressDialog progressDialog;
     private String appConnId;
     private LogonCore lgCore;
-    String login,pwd;
+    String login, pwd;
     boolean islogin = false;
     LogonCoreContext lgCtx = null;
     OnlineODataStore store = null;
@@ -70,10 +70,8 @@ public class LogonActivity extends myActivity{
     public static int TYPE_NOT_CONNECTED = 0;
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
-    private boolean internetConnected=true;
-    private  boolean a=false;
-
-
+    private boolean internetConnected = true;
+    private boolean a = false;
 
 
     @Override
@@ -83,17 +81,10 @@ public class LogonActivity extends myActivity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.login_activity);
-
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
-
-
-
-
-        logonBtn = (Button) findViewById(R.id.btn);
-        usernameEdit = (EditText) findViewById(R.id.txt1);
-        passwordEdit = (EditText) findViewById(R.id.txt2);
+        this.inflateViews();
+        this.initListeners();
         usernameEdit.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
         passwordEdit.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
         final ProgressDialog pDialog = new ProgressDialog(this);
@@ -107,85 +98,82 @@ public class LogonActivity extends myActivity{
         session = new SessionManager(getApplicationContext());
 
         // Check if user is already logged in or not
-       if (session.isLoggedIn()) {
+        if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(getApplicationContext(),Acceuil1.class);
+            Intent intent = new Intent(getApplicationContext(), Acceuil1.class);
             startActivity(intent);
             finish();
-
-
+            return;
         }
 
+    }
+
+
+    private void inflateViews() {
+        logonBtn = (Button) findViewById(R.id.btn);
+        usernameEdit = (EditText) findViewById(R.id.txt1);
+        passwordEdit = (EditText) findViewById(R.id.txt2);
+    }
+
+    private void initListeners() {
         logonBtn.setOnClickListener(new View.OnClickListener() {
 
 
             public void onClick(View view) {
 
-
+                if (!registerInternetCheckReceiver()) {
+                    Toast.makeText(getApplicationContext(), "Connectez-vous à internet et réessayez", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 login = usernameEdit.getText().toString().trim();
-
-
                 pwd = passwordEdit.getText().toString().trim();
-
 
 
                 // Check for empty data in the form
                 if (!login.isEmpty() && !pwd.isEmpty()) {
+                    URL url = null;
+                    try {
+                        url = new URL(url_g);
+                        // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                        //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "une erreur s'est produite merci de réessayer", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                    if(registerInternetCheckReceiver()) {
+                    credProvider = CredentialsProvider1.getInstance(lgCtx, login, pwd);
 
-                        URL url = null;
-                        try {
-                            url = new URL(url_g);
-                         // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                         //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
+                    manager = new CommonAuthFlowsConfigurator(getApplicationContext()).supportBasicAuthUsing(credProvider).configure(new HttpConversationManager(getApplicationContext()));
 
-                        credProvider = CredentialsProvider1.getInstance(lgCtx, login, pwd);
+                    try {
+                        // credProvider = CredentialsProvider1.getInstance(lgCtx,);
+                        store = OnlineODataStore.open(getApplicationContext(), url, manager, null);
 
-
-
-                        manager = new CommonAuthFlowsConfigurator(getApplicationContext()).supportBasicAuthUsing(credProvider).configure(new HttpConversationManager(getApplicationContext()));
-
-
-
-                        try {
-                            // credProvider = CredentialsProvider1.getInstance(lgCtx,);
-                            store = OnlineODataStore.open(getApplicationContext(),url, manager, null);
-
+                    } catch (ODataException e) {
+                        e.printStackTrace();
+                    }
 
 
+                    if (store != null) {
+                        //db.addData2(login, pwd);
+                        session.setLogin(true);
+                        session.setUsername(login);
+                        session.setPassword(pwd);
 
-
-                        } catch (ODataException e) {
-                            e.printStackTrace();
-                        }
-
-
-
-                        if (store!=null) {
-                            //db.addData2(login, pwd);
-                            session.setLogin(true);
-                            session.setUsername(login);
-                            session.setPassword(pwd);
-
-                            Toast.makeText(getApplicationContext(),
-                                    "Bienvenue!", Toast.LENGTH_LONG)
-                                    .show();
+                        Toast.makeText(getApplicationContext(),
+                                "Bienvenue!", Toast.LENGTH_LONG)
+                                .show();
 
                            /* Intent intent = new Intent(LogonActivity.this,
                                     Acceuil1.class);*/
-                            Intent intent = new Intent(getApplicationContext(),Acceuil1.class);
-                            startActivity(intent);
-                            finish();
+                        Intent intent = new Intent(getApplicationContext(), Acceuil1.class);
+                        startActivity(intent);
+                        finish();
 
 
-
-
-                        } else {
+                    } else {
 
 
                            /* deleteAppData();
@@ -194,45 +182,23 @@ public class LogonActivity extends myActivity{
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                             System.exit(0);*/
-                            Toast.makeText(getApplicationContext(),"nom d'utilisateur ou mot de passe incorrecte, réessayez",Toast.LENGTH_SHORT).show();
-                            usernameEdit.setText("");
-                            passwordEdit.setText("");
-
-
-
-                        }
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Connectez-vous à internet et réessayez",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "nom d'utilisateur ou mot de passe incorrecte, réessayez", Toast.LENGTH_SHORT).show();
+                        usernameEdit.setText("");
+                        passwordEdit.setText("");
 
 
                     }
 
 
-
-
-
-                }
-
-                else {
+                } else {
                     // Prompt user to enter credentials
                     Toast.makeText(getApplicationContext(),
                             "Entrez le nom d'utilisateur et le mot de passe", Toast.LENGTH_LONG)
                             .show();
                 }
-
-
-
-
             }
-
-
         });
-
-
-
     }
-
 
     private boolean registerInternetCheckReceiver() {
         IntentFilter internetFilter = new IntentFilter();
@@ -296,13 +262,11 @@ public class LogonActivity extends myActivity{
                 internetConnected = false;
 
 
-
             }
         } else {
 
             if (!internetConnected) {
                 internetConnected = true;
-
 
 
             }
@@ -311,15 +275,12 @@ public class LogonActivity extends myActivity{
         return internetConnected;
 
 
-
     }
-
 
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK)
-        {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             finish();
         }
 
