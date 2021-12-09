@@ -135,11 +135,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String locationProvider = LocationManager.NETWORK_PROVIDER;
             Location lastlocation = locationManager.getLastKnownLocation(locationProvider);
 
-       // if(lastlocation!= null) {
+        if(lastlocation!= null) {
 
             double longitude = lastlocation.getLongitude();
             double latitude  = lastlocation.getLatitude();
-        //}
+
             Location loc3 = new Location("");
             LatLng latLng = new LatLng(latitude, longitude);
             MarkerOptions markerOptions = new MarkerOptions();
@@ -158,182 +158,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             }
 
-
-       // }"HHA  08/07/2020
-
-
-    /*    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-
-            if(cursor.getString(12).equalsIgnoreCase("Point de relais"))
-            {
-                location.add(cursor.getString(17)+cursor.getString(18));
-
-            }
-            else if(cursor.getString(12).equalsIgnoreCase("Livraison au Guichet"))
-            {
-                location.add(cursor.getString(20)+cursor.getString(19));
-            }
-            else{
-                location.add(cursor.getString(4));
-
-            }
-
-
-        }*/
-
-
-    ////////
-
-        // EditText locationSearch = (EditText) findViewById(R.id.editText);
-
-
-        //  String location= locationSearch.getText().toString();
-
-        /////
-
-
-    /*    List<Address> addressList = null;
-        for (int i = 0; i < location.size(); i++) {
-
-            if (location.get(i) != null || !location.get(i).equals("")) {
-                Geocoder geocoder = new Geocoder(this);
-                try {
-                    addressList = geocoder.getFromLocationName(location.get(i), 1);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-
-                }
-
-                if (addressList == null) {
-                    Toast.makeText(this, "Saisir une déstination", Toast.LENGTH_SHORT).show();
-
-                } else if (addressList.size() == 0) {
-                    Toast.makeText(this, "déstination invalide", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Address address = addressList.get(0);
-                    //LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-
-
-
-                    Toast.makeText(getApplicationContext(), address.getLatitude() + " " + address.getLongitude(), Toast.LENGTH_LONG).show();
-                }
-            }
         }
 
-*/
 
 
-
-/*   07/06/2020
-        LatLng latLng = new LatLng(33.688420,-7.385013);
-        LatLng latLng1 = new LatLng(34.033044,-6.835354);
-
-
-
-        ls_pos.add(latLng);
-        mMap.addMarker(new MarkerOptions().position(latLng).title("abaha phone"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-        07/06/2020
-
-*/
-
-        ////////////
-        // mMap.addPolyline(newPolylineOptions().addAll(ls_pos).width(10).color(Color.RED).visible(true).clickable(true));
-
-      /* Polyline line = mMap.addPolyline(
-                new PolylineOptions().add(
-                        new LatLng(ls_pos.get(0).latitude,ls_pos.get(0).longitude),
-                        new LatLng(ls_pos.get(1).latitude,ls_pos.get(1).longitude)
-                ).width(2).color(Color.BLUE).geodesic(true)
-        );*/
-
-////////////:
-    /*    LocationManager locationManager = (LocationManager) getApplicationContext()
-                .getSystemService(Context.LOCATION_SERVICE);
-
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-        Location lastlocation = locationManager.getLastKnownLocation(locationProvider);
-
-
-        double longitude = lastlocation.getLongitude();
-        double latitude = lastlocation.getLatitude();
-
-        Location loc3 = new Location("");
-        LatLng latLng = new LatLng(latitude, longitude);
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("ma position actuelle");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
-
-
-        //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
-
-        if (dis.size() == 0) {
-            Toast.makeText(this, "adresse vide", Toast.LENGTH_SHORT).show();
-            locationManager = (LocationManager) getApplicationContext()
-                    .getSystemService(Context.LOCATION_SERVICE);
-
-            locationProvider = LocationManager.NETWORK_PROVIDER;
-            lastlocation = locationManager.getLastKnownLocation(locationProvider);
-
-
-            longitude = lastlocation.getLongitude();
-            latitude = lastlocation.getLatitude();
-
-            loc3 = new Location("");
-            latLng = new LatLng(latitude, longitude);
-            markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            markerOptions.title("ma position actuelle");
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-            mCurrLocationMarker = mMap.addMarker(markerOptions);
-
-
-            //move map camera
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-
-            //stop location updates
-            if (mGoogleApiClient != null) {
-                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            }
-
-        } else {
-
-
-            for (int i = 0; i < location.size(); i++) {
-
-
-                LatLng from = new LatLng(dis.get(i).getLatitude(),dis.get(i).getLongitude());
-
-
-                LatLng to = new LatLng(loc3.getLatitude(),loc3.getLongitude());
-
-                //Calculating the distance in meters
-                Double distance = SphericalUtil.computeDistanceBetween(from, to);
-
-
-
-
-
-                Toast.makeText(getApplicationContext(), "distance  : " + distance, Toast.LENGTH_LONG).show();
-
-
-
-            }
-
-        }*/
     }
 
 
