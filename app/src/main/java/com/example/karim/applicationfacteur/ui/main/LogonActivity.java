@@ -153,6 +153,7 @@ public class LogonActivity extends myActivity {
 
                     } catch (ODataException e) {
                         e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "une erreur s'est produite merci de réessayer", Toast.LENGTH_SHORT).show();
                     }
 
 

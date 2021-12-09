@@ -17,8 +17,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -32,7 +30,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.karim.applicationfacteur.Constant;
+import com.example.karim.applicationfacteur.utils.Constant;
 import com.example.karim.applicationfacteur.R;
 import com.example.karim.applicationfacteur.services.Operation;
 import com.example.karim.applicationfacteur.services.UIListener;
@@ -279,7 +277,7 @@ public class AgencyFragment1 extends Fragment implements UIListener {
             adr_relais.setVisibility(View.GONE);
         }
         // gsm destinataire
-        telephone.setText("0698998877");
+        telephone.setText(agc.getTelephone_exp());
         telephone.setFocusable(false);
         // gsm exp
         teleph_exp.setText(agc.getTelephone_client());

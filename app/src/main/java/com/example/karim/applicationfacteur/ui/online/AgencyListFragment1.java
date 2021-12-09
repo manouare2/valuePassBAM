@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,7 +103,6 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     private View myView;
 
 
-
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
     private SQLiteHandler db;
@@ -111,16 +111,15 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     static List<Agency3> agencies;
     static List<Agency3> searchResult;
     static ArrayList<String> list = new ArrayList<String>();
-    String login , pwd;
-    int total;
+    String login, pwd;
     protected ConnectionQuality mConnectionClass = ConnectionQuality.UNKNOWN;
     protected ConnectionClassManager mConnectionClassManager;
     protected DeviceBandwidthSampler mDeviceBandwidthSampler;
     protected int mTries;
-    Button btn,btn1;
+    Button btn, btn1;
     LogonCoreContext lgtx;
-    List<ODataEntity> entities ,entities1,entities2,entities3;
-    String str ;
+    List<ODataEntity> entities, entities1, entities2, entities3;
+    String str;
 
     protected SessionManager session;
     private boolean internetConnected = true;
@@ -129,15 +128,14 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     public static int TYPE_NOT_CONNECTED = 0;
     private boolean a;
     private boolean netSpeed;
-    Context context ;
-    String num_obj,num_obj1;
+    Context context;
+    String num_obj, num_obj1;
 
     String activity = this.getClass().getSimpleName();
     String prevStatus = "";
     Cursor cursor;
 
-    UIListener ui= this;
-
+    UIListener ui = this;
 
 
     @Override
@@ -150,38 +148,38 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
     }
 
-    public  TextView childViewAgenciesTitle;
+    public TextView childViewAgenciesTitle;
     private ListView childViewAgenciesList;
     private LayoutInflater inflater;
     private Loader<AsyncResult1<List<Agency3>>> loader;
-    private  Agency agency;
-    private  Agency1 s;
-    private  Agency3 agc;
+    private Agency agency;
+    private Agency1 s;
+    private Agency3 agc;
     String code1;
     AgencyListFragment1 frag;
     private EditText searchBarcode;
-    private AgencyListAdapter1 encoursAdapter,livresAdapter,nonlivresAdapter,aviseAdapter;
-    private Button showSearch;
-    List<Agency3> listEncours,listLivres,listNonlivres,listavisé;
-    ListView encoursView, livresView, nonlivresView,aviseVieuw;
-    ToggleButton btnEncours, btnLivres, btnNonLivres,btnavisé;
-    String code,val1;
+    private AgencyListAdapter1 encoursAdapter, livresAdapter, nonlivresAdapter, aviseAdapter;
+    private ImageView showSearch;
+    List<Agency3> listEncours, listLivres, listNonlivres, listavisé;
+    ListView encoursView, livresView, nonlivresView, aviseVieuw;
+    ToggleButton btnEncours, btnLivres, btnNonLivres, btnavisé;
+    String code, val1;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
 
-
-
-        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION},1);
+        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
         this.inflater = inflater;
 
-        db=new SQLiteHandler(getActivity());
+        db = new SQLiteHandler(getActivity());
 
         session = new SessionManager(getActivity());
 
@@ -189,14 +187,11 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
         if (myView == null) {
 
 
-
-
-
             myView = this.inflater.inflate(R.layout.agency_list_fragment, null);
             childViewAgenciesTitle = (TextView) myView.findViewById(R.id.agencies_title);
             searchBarcode = (EditText) myView.findViewById(R.id.search_barcode);
-            showSearch = (Button) myView.findViewById(R.id.btn_show_search);
-            btn= (Button) myView.findViewById(R.id.jrne);
+            showSearch = (ImageView) myView.findViewById(R.id.btn_show_search);
+            btn = (Button) myView.findViewById(R.id.jrne);
 
 
             btnEncours = (ToggleButton) myView.findViewById(R.id.toggleButton);
@@ -216,8 +211,6 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             aviseVieuw = (ListView) myView.findViewById(R.id.avisé);
 
 
-
-
             loader = getLoaderManager().initLoader(0, savedInstanceState, this);
 
             btnEncours.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -232,8 +225,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                         btnNonLivres.setChecked(false);
                         btnLivres.setChecked(false);
                         btnavisé.setChecked(false);
-                    }
-                    else {
+                    } else {
                         encoursView.setVisibility(View.GONE);
                     }
                 }
@@ -251,8 +243,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                         btnNonLivres.setChecked(false);
                         btnEncours.setChecked(false);
                         btnavisé.setChecked(false);
-                    }
-                    else {
+                    } else {
                         livresView.setVisibility(View.GONE);
                     }
                 }
@@ -270,8 +261,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                         btnEncours.setChecked(false);
                         btnLivres.setChecked(false);
                         btnavisé.setChecked(false);
-                    }
-                    else {
+                    } else {
                         nonlivresView.setVisibility(View.GONE);
                     }
                 }
@@ -290,18 +280,11 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                         btnEncours.setChecked(false);
                         btnLivres.setChecked(false);
                         btnNonLivres.setChecked(false);
-                    }
-                    else {
+                    } else {
                         encoursView.setVisibility(View.GONE);
                     }
                 }
             });
-
-
-
-
-
-
 
 
 
@@ -323,24 +306,16 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             btn.setOnClickListener(new View.OnClickListener() {
 
 
-
                 public void onClick(View view) {
 
                     db = new SQLiteHandler(getActivity());
                     cursor = db.getAll3(session.getUsername());
-                    if (cursor.getCount() != 0)
-
-                    {
+                    if (cursor.getCount() != 0) {
 
                         InsertBatch(cursor);
 
 
-                    }
-
-                    else
-                    {
-
-
+                    } else {
 
 
                         db = new SQLiteHandler(getActivity());
@@ -348,15 +323,11 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                         final ArrayList<String> selectedList1 = new ArrayList<>();
 
 
-
                         Cursor cursor1 = db.getAlldist(new SessionManager(getActivity()).getUsername());
-                        if(cursor1.getCount()==0)
-                        {
-                            Toast.makeText(getActivity(),"aucune DNL à cloturer",Toast.LENGTH_SHORT).show();
+                        if (cursor1.getCount() == 0) {
+                            Toast.makeText(getActivity(), "aucune DNL à cloturer", Toast.LENGTH_SHORT).show();
 
-                        }
-
-                        else {
+                        } else {
 
                             for (cursor1.moveToFirst(); !cursor1.isAfterLast(); cursor1.moveToNext()) {
 
@@ -408,14 +379,12 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                         if (cr.getCount() == 0) {
 
 
-
                                             String val = selectedStrings.get(k) + "";
-                                             str = val;
+                                            str = val;
 
                                             str = str.replace(" ", "");
 
-                                            if(registerInternetCheckReceiver())
-                                            {
+                                            if (registerInternetCheckReceiver()) {
                                                 //cloturerjrne(getActivity(), str);
                                                 mConnectionClassManager = ConnectionClassManager.getInstance();
                                                 mDeviceBandwidthSampler = DeviceBandwidthSampler.getInstance();
@@ -443,7 +412,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                                             getActivity().runOnUiThread(new Runnable() {
                                                                 @Override
                                                                 public void run() {
-                                                                    Toast.makeText(getActivity(),"Verifiez votre connexion internet",Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(getActivity(), "Verifiez votre connexion internet", Toast.LENGTH_SHORT).show();
 
                                                                 }
                                                             });
@@ -454,7 +423,8 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                                                     @Override
                                                     public void onResponse(Response response) throws IOException {
-                                                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                                                        if (!response.isSuccessful())
+                                                            throw new IOException("Unexpected code " + response);
 
                                                         mDeviceBandwidthSampler.stopSampling();
                                                         getActivity().runOnUiThread(new Runnable() {
@@ -463,7 +433,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                                                 //  Toast.makeText(getActivity(),"Connecté",Toast.LENGTH_SHORT).show();
 
                                                                 CredentialsProvider1 credProvider = CredentialsProvider1
-                                                                        .getInstance(lgtx,login,pwd);
+                                                                        .getInstance(lgtx, login, pwd);
 
                                                                 HttpConversationManager manager = new CommonAuthFlowsConfigurator(
                                                                         getContext()).supportBasicAuthUsing(credProvider).configure(
@@ -471,16 +441,16 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
 
                                                                 XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
-                                                                XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(getContext(),requestFilter);
+                                                                XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(getContext(), requestFilter);
                                                                 manager.addFilter(requestFilter);
                                                                 manager.addFilter(responseFilter);
                                                                 URL url = null;
 
 
                                                                 try {
-                                                                 //   url = new URL(url_g);
+                                                                    //   url = new URL(url_g);
                                                                     url = new URL("http://testpda.barid.ma/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                                                                   // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                                                                    // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
                                                                 } catch (MalformedURLException e) {
                                                                     e.printStackTrace();
 
@@ -493,19 +463,17 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                                                                 } catch (ODataException e) {
                                                                     e.printStackTrace();
-                                                                    Toast.makeText(getContext(),"une erreur est surevnue réessayer plus tard",Toast.LENGTH_SHORT).show();
-                                                                    Log.e("e0",e.toString());
+                                                                    Toast.makeText(getContext(), "une erreur est surevnue réessayer plus tard", Toast.LENGTH_SHORT).show();
+                                                                    Log.e("e0", e.toString());
                                                                 }
 
                                                                 // if (store==null) return;
 
-                                                                if(store!=null)
-
-                                                                {
+                                                                if (store != null) {
 
                                                                     try {
 
-                                                                        ODataEntity newEntity = createAgencyEntity2(store,str);
+                                                                        ODataEntity newEntity = createAgencyEntity2(store, str);
 
 
                                                                         store.executeUpdateEntity(newEntity, null);
@@ -524,13 +492,10 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                                                             for (cursorr.moveToFirst(); !cursorr.isAfterLast(); cursorr.moveToNext()) {
                                                                                 for (int m = 0; m < listLivres.size(); m++) {
 
-                                                                                    Log.e("t2",cursorr.getString(0).toString() );
-                                                                                    Log.e("t3",listLivres.get(m).getCode_envoi().toString() );
+                                                                                    Log.e("t2", cursorr.getString(0).toString());
+                                                                                    Log.e("t3", listLivres.get(m).getCode_envoi().toString());
 
-                                                                                    if (listLivres.get(m).getCode_envoi().equalsIgnoreCase(cursorr.getString(0)))
-
-
-                                                                                    {
+                                                                                    if (listLivres.get(m).getCode_envoi().equalsIgnoreCase(cursorr.getString(0))) {
                                                                                         Log.e("test", "test");
 
                                                                                         listLivres.remove(listLivres.get(m));
@@ -556,10 +521,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                                                                                 for (int n = 0; n < listNonlivres.size(); n++) {
 
-                                                                                    if (listNonlivres.get(n).getCode_envoi().equalsIgnoreCase(cursorr.getString(0)))
-
-
-                                                                                    {
+                                                                                    if (listNonlivres.get(n).getCode_envoi().equalsIgnoreCase(cursorr.getString(0))) {
 
                                                                                         listNonlivres.remove(listNonlivres.get(n));
                                                                                         changeToggleText();
@@ -583,10 +545,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                                                                                 for (int n = 0; n < listavisé.size(); n++) {
 
-                                                                                    if (listavisé.get(n).getCode_envoi().equalsIgnoreCase(cursorr.getString(0)))
-
-
-                                                                                    {
+                                                                                    if (listavisé.get(n).getCode_envoi().equalsIgnoreCase(cursorr.getString(0))) {
 
                                                                                         listavisé.remove(listavisé.get(n));
                                                                                         changeToggleText();
@@ -599,7 +558,6 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
 
                                                                         }
-
 
 
                                                                         db.deleteobj(str);
@@ -640,18 +598,11 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                                                     }
 
 
-                                                                }
+                                                                } else {
 
-
-                                                                else
-                                                                {
-
-                                                                    Toast.makeText(getActivity(), "DNL № "+str+"n'est pas cloturée,une erreur est surevnue réssayer plus tard", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(getActivity(), "DNL № " + str + "n'est pas cloturée,une erreur est surevnue réssayer plus tard", Toast.LENGTH_SHORT).show();
 
                                                                 }
-
-
-
 
 
                                                             }
@@ -661,17 +612,11 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                                     }
 
 
-
                                                 });
 
+                                            } else {
+                                                Toast.makeText(getActivity(), "Vérifiez votre connexion internet puis réssayer", Toast.LENGTH_SHORT).show();
                                             }
-                                            else
-                                            {
-                                                Toast.makeText(getActivity(),"Vérifiez votre connexion internet puis réssayer",Toast.LENGTH_SHORT).show();
-                                            }
-
-
-
 
 
                                             clotur.add(selectedStrings.get(k));
@@ -687,41 +632,16 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                     }
 
 
-
-
-
                                 }
                             });
 
                             builder.show();
 
 
-
-
-
-
-
                         }
 
 
-
                     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 }
@@ -776,9 +696,6 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             });*/
 
 
-
-
-
         }
 
         searchBarcode.addTextChangedListener(new TextWatcher() {
@@ -790,10 +707,17 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // recherche
-               livresAdapter.getFilter().filter(charSequence.toString());
-                nonlivresAdapter.getFilter().filter(charSequence.toString());
-                aviseAdapter.getFilter().filter(charSequence.toString());
-                encoursAdapter.getFilter().filter(charSequence.toString());
+                livresAdapter.filter(charSequence.toString());
+                nonlivresAdapter.filter(charSequence.toString());
+                aviseAdapter.filter(charSequence.toString());
+                encoursAdapter.filter(charSequence.toString());
+
+                changeToggleText();
+
+                btnEncours.setChecked(true);
+                btnLivres.setChecked(false);
+                btnNonLivres.setChecked(false);
+                btnavisé.setChecked(false);
 
             }
 
@@ -809,16 +733,16 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                 encoursView.setVisibility(View.VISIBLE);
                 livresView.setVisibility(View.VISIBLE);
                 nonlivresView.setVisibility(View.VISIBLE);
-              //  aviseVieuw.setVisibility(View.);
+                //  aviseVieuw.setVisibility(View.);
                 if (searchBarcode.getVisibility() == View.GONE) {
                     childViewAgenciesTitle.setVisibility(View.GONE);
                     searchBarcode.setVisibility(View.VISIBLE);
                     searchBarcode.setSelected(true);
-                }
-                else {
+                } else {
                     searchBarcode.setVisibility(View.GONE);
                     childViewAgenciesTitle.setVisibility(View.VISIBLE);
                     searchBarcode.setText("");
+                    changeToggleText();
                 }
             }
         });
@@ -841,26 +765,19 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             }
         });
 
-        encoursAdapter = new AgencyListAdapter1(this,encoursView, inflater, listEncours,getActivity());
+        encoursAdapter = new AgencyListAdapter1(this, encoursView, inflater, listEncours, getActivity());
         encoursView.setAdapter(encoursAdapter);
-        livresAdapter = new AgencyListAdapter1(this,livresView, inflater, listLivres,getActivity());
+        livresAdapter = new AgencyListAdapter1(this, livresView, inflater, listLivres, getActivity());
         livresView.setAdapter(livresAdapter);
-        nonlivresAdapter = new AgencyListAdapter1(this,nonlivresView, inflater, listNonlivres,getActivity());
+        nonlivresAdapter = new AgencyListAdapter1(this, nonlivresView, inflater, listNonlivres, getActivity());
         nonlivresView.setAdapter(nonlivresAdapter);
-        aviseAdapter = new AgencyListAdapter1(this,aviseVieuw, inflater, listavisé,getActivity());
+        aviseAdapter = new AgencyListAdapter1(this, aviseVieuw, inflater, listavisé, getActivity());
         aviseVieuw.setAdapter(aviseAdapter);
 
         changeToggleText();
-        btnEncours.setChecked(true);
-        btnLivres.setChecked(false);
-        btnNonLivres.setChecked(false);
-        btnavisé.setChecked(false);
-
-
-
-
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -870,8 +787,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     }
 
 
-
-    public void onSaveRequested(){
+    public void onSaveRequested() {
         Intent intent = new Intent();
         intent.setClass(getActivity(), AgencyActivity1.class);
 
@@ -881,12 +797,11 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     }
 
 
-
-    public void onAgencySelected(final Agency3 agency){
+    public void onAgencySelected(final Agency3 agency) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), AgencyActivity1.class);
         intent.putExtra("AgencySelected", agency);
-        intent.putExtra("siz",String.valueOf(agencies.size()));
+        intent.putExtra("siz", String.valueOf(agencies.size()));
         // Toast.makeText(getContext(),agencies.size()+"taille",Toast.LENGTH_SHORT).show();
         startActivity(intent);
         getActivity().finish();
@@ -1015,7 +930,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
         alert1.show();*/
     }
 
-    public void onRefreshRequested(){
+    public void onRefreshRequested() {
         refresh();
 
     }
@@ -1036,44 +951,35 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
         } else {
             agencies = result.getData();
 
-            for(Agency3 agc: agencies) {
+            for (Agency3 agc : agencies) {
                 if (agc.getStat().equalsIgnoreCase("En cours")) {
                     if (list.size() == 0) {
                         agc.setObj(agc.getObj1());
                         list.add(agc.getObj());
-                    }
-
-                    else{
-                        for(int i =0;i<list.size();i++)
-                        {
+                    } else {
+                        for (int i = 0; i < list.size(); i++) {
 
                             SharedPreferences sp = getActivity().getSharedPreferences("ob", Context.MODE_PRIVATE);
-                            String obj  = sp.getString("ob1", null);
-                            if(obj==null)
-                            {
+                            String obj = sp.getString("ob1", null);
+                            if (obj == null) {
 
-                            }
-                            else {
+                            } else {
 
-                                obj  = String.valueOf(sp.getString("ob1", null));
+                                obj = String.valueOf(sp.getString("ob1", null));
 
-                                String val=obj+"";
-                                String  str = val;
-                                str= str.replace(" " , "");
-                                if(agc.getObj().equalsIgnoreCase(str))
-                                {    agc.setObj("");
+                                String val = obj + "";
+                                String str = val;
+                                str = str.replace(" ", "");
+                                if (agc.getObj().equalsIgnoreCase(str)) {
+                                    agc.setObj("");
 
-                                }
-                                else{
+                                } else {
 
                                     agc.setObj(str);
                                 }
 
 
-
-
                             }
-
 
 
                         }
@@ -1087,14 +993,12 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                 } else if (agc.getStat().equalsIgnoreCase("Avisé")) {
                     listavisé.add(agc);
                     list.clear();
-                }else
-                {
+                } else {
                     listNonlivres.add(agc);
                     list.clear();
                 }
 
             }
-
 
 
             onResume();
@@ -1104,7 +1008,6 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
 
     }
-
 
 
     @Override
@@ -1122,6 +1025,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
 
     }
+
     public void onPause() {
         super.onPause();
 
@@ -1619,7 +1523,6 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     }
 
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -1660,21 +1563,22 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
     public void changeToggleText() {
 
-        total = listEncours.size()+listLivres.size()+listNonlivres.size()+listavisé.size();
+        int total = encoursAdapter.willGetDisplayedData().size()
+                + livresAdapter.willGetDisplayedData().size()
+                + nonlivresAdapter.willGetDisplayedData().size();
 
-        btnEncours.setTextOff("En cours "+listEncours.size()+"/"+total);
-        btnEncours.setTextOn("En cours "+listEncours.size()+"/"+total);
-        btnLivres.setTextOff("Livrés "+listLivres.size()+"/"+total);
-        btnLivres.setTextOn("Livrés "+listLivres.size()+"/"+total);
-        btnNonLivres.setTextOff("Non livrés "+listNonlivres.size()+"/"+total);
-        btnNonLivres.setTextOn("Non livrés "+listNonlivres.size()+"/"+total);
-        btnavisé.setTextOff("Avisé "+listavisé.size()+"/"+total);
-        btnavisé.setTextOn("Avisé "+listavisé.size()+"/"+total);
+
+        btnEncours.setTextOff("En cours " + encoursAdapter.willGetDisplayedData().size() + "/" + total);
+        btnEncours.setTextOn("En cours " + encoursAdapter.willGetDisplayedData().size() + "/" + total);
+
+        btnLivres.setTextOff("Livrés " + livresAdapter.willGetDisplayedData().size()  + "/" + total);
+        btnLivres.setTextOn("Livrés " + livresAdapter.willGetDisplayedData().size()  + "/" + total);
+
+        btnNonLivres.setTextOff("Non livrés " + nonlivresAdapter.willGetDisplayedData().size() + "/" + total);
+        btnNonLivres.setTextOn("Non livrés " + nonlivresAdapter.willGetDisplayedData().size() + "/" + total);
     }
 
-    public void InsertBatch(Cursor cursor)
-
-    {
+    public void InsertBatch(Cursor cursor) {
 
         /*db = new SQLiteHandler(getApplicationContext());
 
@@ -1709,8 +1613,8 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
 
         try {
-           url = new URL("http://testpda.barid.ma/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-           // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            url = new URL("http://testpda.barid.ma/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -1724,7 +1628,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             Log.e("e0", e.toString());
         }
 
-        if(store!=null) {
+        if (store != null) {
 
 
             ODataRequestParamBatch requestParamBatch = new ODataRequestParamBatchDefaultImpl();
@@ -1757,8 +1661,8 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                 newEntity.getProperties().put("Motif", new ODataPropertyDefaultImpl("Motif", cursor.getString(8)));
                 newEntity.getProperties().put("Mesure", new ODataPropertyDefaultImpl("Mesure", cursor.getString(9)));
-                newEntity.getProperties().put("ModePaiement", new ODataPropertyDefaultImpl("ModePaiement",cursor.getString(10)));
-                newEntity.getProperties().put("TypePid", new ODataPropertyDefaultImpl("TypePid",cursor.getString(11)));
+                newEntity.getProperties().put("ModePaiement", new ODataPropertyDefaultImpl("ModePaiement", cursor.getString(10)));
+                newEntity.getProperties().put("TypePid", new ODataPropertyDefaultImpl("TypePid", cursor.getString(11)));
                 newEntity.getProperties().put("Pid", new ODataPropertyDefaultImpl("Pid", cursor.getString(12)));
                 newEntity.getProperties().put("Destinataire", new ODataPropertyDefaultImpl("Destinataire", cursor.getString(13)));
                 newEntity.getProperties().put("ModeLiv", new ODataPropertyDefaultImpl("ModeLiv", cursor.getString(14)));
@@ -1862,15 +1766,11 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                 final ArrayList<String> selectedList1 = new ArrayList<>();
 
 
-
                                 Cursor cursor1 = db.getAlldist(new SessionManager(getActivity()).getUsername());
-                                if(cursor1.getCount()==0)
-                                {
-                                    Toast.makeText(getActivity(),"aucune DNL à cloturer",Toast.LENGTH_SHORT).show();
+                                if (cursor1.getCount() == 0) {
+                                    Toast.makeText(getActivity(), "aucune DNL à cloturer", Toast.LENGTH_SHORT).show();
 
-                                }
-
-                                else {
+                                } else {
 
                                     for (cursor1.moveToFirst(); !cursor1.isAfterLast(); cursor1.moveToNext()) {
 
@@ -1922,23 +1822,16 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                                 if (cr.getCount() == 0) {
 
 
-
                                                     String val = selectedStrings.get(k) + "";
                                                     String str = val;
 
                                                     str = str.replace(" ", "");
 
-                                                    if(registerInternetCheckReceiver())
-                                                    {
+                                                    if (registerInternetCheckReceiver()) {
                                                         cloturerjrne(getActivity(), str);
+                                                    } else {
+                                                        Toast.makeText(getActivity(), "Vérifiez votre connexion internet puis réssayer", Toast.LENGTH_SHORT).show();
                                                     }
-                                                    else
-                                                    {
-                                                        Toast.makeText(getActivity(),"Vérifiez votre connexion internet puis réssayer",Toast.LENGTH_SHORT).show();
-                                                    }
-
-
-
 
 
                                                     clotur.add(selectedStrings.get(k));
@@ -1954,22 +1847,13 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                             }
 
 
-
-
-
                                         }
                                     });
 
                                     builder.show();
 
 
-
-
-
-
-
                                 }
-
 
 
                             } else {
@@ -2009,10 +1893,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                 }
                 Log.e("1", "27");
-            }
-
-
-            else {
+            } else {
 
 
                 Toast.makeText(getActivity(), "une erreur est survenue, réssayer plus tard", Toast.LENGTH_LONG).show();
@@ -2090,7 +1971,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
         @Override
         public void onReceive(Context context, Intent intent) {
             String status = getConnectivityStatusString(context);
-            if(!prevStatus.equals(status)) {
+            if (!prevStatus.equals(status)) {
                 a = setSnackbarMessage(status, false);
                 //   Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
                 Log.e("Conn", status);
@@ -2160,7 +2041,6 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     }
 
 
-
     private void testNetworkSpeed() {
         mConnectionClassManager = ConnectionClassManager.getInstance();
         mDeviceBandwidthSampler = DeviceBandwidthSampler.getInstance();
@@ -2187,7 +2067,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getActivity(),"Timed out",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Timed out", Toast.LENGTH_SHORT).show();
                         }
                     });
                     netSpeed = false;
@@ -2204,7 +2084,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(),"Connecté",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Connecté", Toast.LENGTH_SHORT).show();
                         // InsertBatch("");
 
                     }
@@ -2216,13 +2096,11 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     }
 
 
-
-
     private static ODataEntity createAgencyEntity3(OnlineODataStore store, String code1) throws ODataParserException {
         //BEGIN
-        Log.e("1","1");
+        Log.e("1", "1");
         ODataEntity newEntity = null;
-        if (store!=null) {
+        if (store != null) {
 
             newEntity = new ODataEntityDefaultImpl("Z_ODATA_BAM2_SRV.DNLHEAD");
 
@@ -2233,16 +2111,13 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             }
             //If available, it populates the navigation properties of an OData Entity
             store.allocateNavigationProperties(newEntity);
-            Log.e("2","2");
-           /* newEntity.getProperties().put("ZnumObj",new ODataPropertyDefaultImpl("ZnumObj",0000000655));*/
+            Log.e("2", "2");
+            /* newEntity.getProperties().put("ZnumObj",new ODataPropertyDefaultImpl("ZnumObj",0000000655));*/
 
-            newEntity.getProperties().put("StatutTournee",new ODataPropertyDefaultImpl("StatutTournee","C"));
-
-
+            newEntity.getProperties().put("StatutTournee", new ODataPropertyDefaultImpl("StatutTournee", "C"));
 
 
-
-            String resourcePath =("DNLHEADSet('" + code1 + "')");
+            String resourcePath = ("DNLHEADSet('" + code1 + "')");
 
             newEntity.setResourcePath(resourcePath, resourcePath);
 
@@ -2256,9 +2131,9 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
     private static ODataEntity createAgencyEntity2(OnlineODataStore store, String code1) throws ODataParserException {
         //BEGIN
-        Log.e("1","1");
+        Log.e("1", "1");
         ODataEntity newEntity = null;
-        if (store!=null) {
+        if (store != null) {
 
             newEntity = new ODataEntityDefaultImpl("Z_ODATA_BAM2_SRV.DNLHEAD");
 
@@ -2269,16 +2144,13 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             }
             //If available, it populates the navigation properties of an OData Entity
             store.allocateNavigationProperties(newEntity);
-            Log.e("2","2");
-           /* newEntity.getProperties().put("ZnumObj",new ODataPropertyDefaultImpl("ZnumObj",0000000655));*/
+            Log.e("2", "2");
+            /* newEntity.getProperties().put("ZnumObj",new ODataPropertyDefaultImpl("ZnumObj",0000000655));*/
 
-            newEntity.getProperties().put("StatutTournee",new ODataPropertyDefaultImpl("StatutTournee","T"));
-
-
+            newEntity.getProperties().put("StatutTournee", new ODataPropertyDefaultImpl("StatutTournee", "T"));
 
 
-
-            String resourcePath =("DNLHEADSet('" + code1 + "')");
+            String resourcePath = ("DNLHEADSet('" + code1 + "')");
 
             newEntity.setResourcePath(resourcePath, resourcePath);
 
@@ -2290,23 +2162,14 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     }
 
 
-
-
-
-
-
-
-
-
-    public void chargerDNL(Context ctx,String code1)
-    {
+    public void chargerDNL(Context ctx, String code1) {
       /*  session = new SessionManager(ctx);
         login = session.getUsername();
         pwd = session.getPassword();
 */
 
         CredentialsProvider1 credProvider = CredentialsProvider1
-                .getInstance(lgtx,login,pwd);
+                .getInstance(lgtx, login, pwd);
 
         HttpConversationManager manager = new CommonAuthFlowsConfigurator(
                 ctx).supportBasicAuthUsing(credProvider).configure(
@@ -2314,7 +2177,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
 
         XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
-        XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(ctx,requestFilter);
+        XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(ctx, requestFilter);
         manager.addFilter(requestFilter);
         manager.addFilter(responseFilter);
         URL url = null;
@@ -2322,7 +2185,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
         try {
             url = new URL("http://testpda.barid.ma/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-           // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
         } catch (MalformedURLException e) {
             e.printStackTrace();
 
@@ -2334,13 +2197,13 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             store = OnlineODataStore.open(ctx, url, manager, null);
         } catch (ODataException e) {
             e.printStackTrace();
-            Log.e("e0",e.toString());
+            Log.e("e0", e.toString());
         }
 
-        if (store==null) return;
+        if (store == null) return;
         try {
 
-            ODataEntity newEntity = createAgencyEntity3(store,code1);
+            ODataEntity newEntity = createAgencyEntity3(store, code1);
 
             store.executeUpdateEntity(newEntity, null);
             // Toast.makeText(getActivity(),"Votre DNL est chargée",Toast.LENGTH_SHORT).show();
@@ -2361,8 +2224,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
     }
 
 
-    public void cloturerjrne(final Context ctx, final String obj)
-    {
+    public void cloturerjrne(final Context ctx, final String obj) {
 
         mConnectionClassManager = ConnectionClassManager.getInstance();
         mDeviceBandwidthSampler = DeviceBandwidthSampler.getInstance();
@@ -2389,7 +2251,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getActivity(),"Verifiez votre connexion internet",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Verifiez votre connexion internet", Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -2409,7 +2271,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                         //  Toast.makeText(getActivity(),"Connecté",Toast.LENGTH_SHORT).show();
 
                         CredentialsProvider1 credProvider = CredentialsProvider1
-                                .getInstance(lgtx,login,pwd);
+                                .getInstance(lgtx, login, pwd);
 
                         HttpConversationManager manager = new CommonAuthFlowsConfigurator(
                                 ctx).supportBasicAuthUsing(credProvider).configure(
@@ -2417,7 +2279,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
 
                         XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
-                        XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(ctx,requestFilter);
+                        XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(ctx, requestFilter);
                         manager.addFilter(requestFilter);
                         manager.addFilter(responseFilter);
                         URL url = null;
@@ -2425,7 +2287,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                         try {
                             url = new URL("http://testpda.barid.ma/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                          //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                            //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
 
@@ -2438,15 +2300,13 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                         } catch (ODataException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"une erreur est surevnue réessayer plus tard",Toast.LENGTH_SHORT).show();
-                            Log.e("e0",e.toString());
+                            Toast.makeText(ctx, "une erreur est surevnue réessayer plus tard", Toast.LENGTH_SHORT).show();
+                            Log.e("e0", e.toString());
                         }
 
                         // if (store==null) return;
 
-                        if(store!=null)
-
-                        {
+                        if (store != null) {
 
                             try {
 
@@ -2469,13 +2329,10 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                                     for (cursorr.moveToFirst(); !cursorr.isAfterLast(); cursorr.moveToNext()) {
                                         for (int m = 0; m < listLivres.size(); m++) {
 
-                                            Log.e("t2",cursorr.getString(0).toString() );
-                                            Log.e("t3",listLivres.get(m).getCode_envoi().toString() );
+                                            Log.e("t2", cursorr.getString(0).toString());
+                                            Log.e("t3", listLivres.get(m).getCode_envoi().toString());
 
-                                            if (listLivres.get(m).getCode_envoi().equalsIgnoreCase(cursorr.getString(0)))
-
-
-                                            {
+                                            if (listLivres.get(m).getCode_envoi().equalsIgnoreCase(cursorr.getString(0))) {
                                                 Log.e("test", "test");
 
                                                 listLivres.remove(listLivres.get(m));
@@ -2501,10 +2358,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                                         for (int n = 0; n < listNonlivres.size(); n++) {
 
-                                            if (listNonlivres.get(n).getCode_envoi().equalsIgnoreCase(cursorr.getString(0)))
-
-
-                                            {
+                                            if (listNonlivres.get(n).getCode_envoi().equalsIgnoreCase(cursorr.getString(0))) {
 
                                                 listNonlivres.remove(listNonlivres.get(n));
                                                 changeToggleText();
@@ -2528,10 +2382,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
                                         for (int n = 0; n < listavisé.size(); n++) {
 
-                                            if (listavisé.get(n).getCode_envoi().equalsIgnoreCase(cursorr.getString(0)))
-
-
-                                            {
+                                            if (listavisé.get(n).getCode_envoi().equalsIgnoreCase(cursorr.getString(0))) {
 
                                                 listavisé.remove(listavisé.get(n));
                                                 changeToggleText();
@@ -2544,7 +2395,6 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
 
 
                                 }
-
 
 
                                 db.deleteobj(obj);
@@ -2585,18 +2435,11 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                             }
 
 
-                        }
+                        } else {
 
-
-                        else
-                        {
-
-                            Toast.makeText(getActivity(), "DNL № "+obj+"n'est pas cloturée,une erreur est surevnue réssayer plus tard", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "DNL № " + obj + "n'est pas cloturée,une erreur est surevnue réssayer plus tard", Toast.LENGTH_SHORT).show();
 
                         }
-
-
-
 
 
                     }
@@ -2606,20 +2449,17 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             }
 
 
-
         });
 
 
     }
 
 
-    public  void motif() {
-        Log.e("han2","han2");
+    public void motif() {
+        Log.e("han2", "han2");
 
 
-
-
-        db=new SQLiteHandler(getActivity());
+        db = new SQLiteHandler(getActivity());
 
         mConnectionClassManager = ConnectionClassManager.getInstance();
         mDeviceBandwidthSampler = DeviceBandwidthSampler.getInstance();
@@ -2663,236 +2503,236 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
                     throw new IOException("Unexpected code " + response);
 
                 mDeviceBandwidthSampler.stopSampling();
-                 if (getActivity() != null) {
-                     getActivity().runOnUiThread(new Runnable() {
-                         @Override
-                         public void run() {
-                             //Toast.makeText(getApplicationContext(), "Connecté", Toast.LENGTH_SHORT).show();
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(getApplicationContext(), "Connecté", Toast.LENGTH_SHORT).show();
 
-                             session = new SessionManager(getActivity());
-                             login = session.getUsername();
-                             pwd = session.getPassword();
+                            session = new SessionManager(getActivity());
+                            login = session.getUsername();
+                            pwd = session.getPassword();
 
-                             CredentialsProvider1 credProvider = CredentialsProvider1
-                                     .getInstance(lgtx, login, pwd);
+                            CredentialsProvider1 credProvider = CredentialsProvider1
+                                    .getInstance(lgtx, login, pwd);
 
-                             HttpConversationManager manager = new CommonAuthFlowsConfigurator(
-                                     getActivity()).supportBasicAuthUsing(credProvider).configure(
-                                     new HttpConversationManager(getActivity()));
-
-
-                             XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
-                             XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(getActivity(),
-                                     requestFilter);
-                             manager.addFilter(requestFilter);
-                             manager.addFilter(responseFilter);
-                             URL url = null;
-
-                             try {
-                                 url = new URL("http://testpda.barid.ma/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                                 //    url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                             } catch (MalformedURLException e) {
-                                 e.printStackTrace();
-                             }
-                             //Method to open a new online store asynchronously
+                            HttpConversationManager manager = new CommonAuthFlowsConfigurator(
+                                    getActivity()).supportBasicAuthUsing(credProvider).configure(
+                                    new HttpConversationManager(getActivity()));
 
 
-                             //Check if OnlineODataStore opened successfully
-                             OnlineODataStore store = null;
+                            XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
+                            XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(getActivity(),
+                                    requestFilter);
+                            manager.addFilter(requestFilter);
+                            manager.addFilter(responseFilter);
+                            URL url = null;
 
-                             try {
-                                 store = OnlineODataStore.open(getActivity(), url, manager, null);
-                             } catch (ODataException e) {
-                                 e.printStackTrace();
-                                 Toast.makeText(getActivity(), " une erreur est survenue réssayer plus tard", Toast.LENGTH_SHORT).show();
-                             }
+                            try {
+                                url = new URL("http://testpda.barid.ma/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                                //    url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                            //Method to open a new online store asynchronously
 
-                             // ArrayList<Agency> agencyList = new ArrayList<Agency>();
+
+                            //Check if OnlineODataStore opened successfully
+                            OnlineODataStore store = null;
+
+                            try {
+                                store = OnlineODataStore.open(getActivity(), url, manager, null);
+                            } catch (ODataException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getActivity(), " une erreur est survenue réssayer plus tard", Toast.LENGTH_SHORT).show();
+                            }
+
+                            // ArrayList<Agency> agencyList = new ArrayList<Agency>();
 
 	/*	AgencyOpenListener openListener = AgencyOpenListener.getInstance();
 		OnlineODataStore store = openListener.getStore();*/
 
-                             if (store != null) {
+                            if (store != null) {
 
-                                 Cursor cr = db.getAllmotif();
-                                 if (cr.getCount() == 0) {
-                                     ODataProperty property;
-                                     ODataPropMap properties;
-
-
-                                     ODataResponseSingle resp = null;
-                                     try {
-                                         resp = store.executeReadEntitySet(
-                                                 "MOTIFSet", null);
-                                     } catch (ODataNetworkException e) {
-                                         e.printStackTrace();
-                                     } catch (ODataParserException e) {
-                                         e.printStackTrace();
-                                     } catch (ODataContractViolationException e) {
-                                         e.printStackTrace();
-                                     }
-                                     //Get the response payload
+                                Cursor cr = db.getAllmotif();
+                                if (cr.getCount() == 0) {
+                                    ODataProperty property;
+                                    ODataPropMap properties;
 
 
-                                     //Get the response payload
-                                     ODataEntitySet feed = (ODataEntitySet) resp.getPayload();
-                                     //Get the list of ODataEntity
+                                    ODataResponseSingle resp = null;
+                                    try {
+                                        resp = store.executeReadEntitySet(
+                                                "MOTIFSet", null);
+                                    } catch (ODataNetworkException e) {
+                                        e.printStackTrace();
+                                    } catch (ODataParserException e) {
+                                        e.printStackTrace();
+                                    } catch (ODataContractViolationException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //Get the response payload
 
-                                     entities = feed.getEntities();
 
-                                     for (ODataEntity entity : entities) {
-                                         properties = entity.getProperties();
+                                    //Get the response payload
+                                    ODataEntitySet feed = (ODataEntitySet) resp.getPayload();
+                                    //Get the list of ODataEntity
+
+                                    entities = feed.getEntities();
+
+                                    for (ODataEntity entity : entities) {
+                                        properties = entity.getProperties();
 
 
                                /* motif = (String) properties.get("ZsdMotif").getValue();
                                 designation = (String) properties.get("ZsdDesignation").getValue();*/
-                                         db.addmotif((String) properties.get("ZsdMotif").getValue(), (String) properties.get("ZsdDesignation").getValue());
+                                        db.addmotif((String) properties.get("ZsdMotif").getValue(), (String) properties.get("ZsdDesignation").getValue());
 
-                                         //  Toast.makeText(getApplicationContext(), "hanane", Toast.LENGTH_SHORT).show();
-
-
-                                         ////////////////////////////////////////////////////////
+                                        //  Toast.makeText(getApplicationContext(), "hanane", Toast.LENGTH_SHORT).show();
 
 
-                                     }
-
-                                 }
+                                        ////////////////////////////////////////////////////////
 
 
-                                 Cursor crr = db.getAllmesure();
-                                 if (crr.getCount() == 0) {
-                                     ODataProperty property1;
-                                     ODataPropMap properties1;
+                                    }
+
+                                }
 
 
-                                     ODataResponseSingle resp1 = null;
-                                     try {
-                                         resp1 = store.executeReadEntitySet(
-                                                 "MESURESet", null);
-                                     } catch (ODataNetworkException e) {
-                                         e.printStackTrace();
-                                     } catch (ODataParserException e) {
-                                         e.printStackTrace();
-                                     } catch (ODataContractViolationException e) {
-                                         e.printStackTrace();
-                                     }
-                                     //Get the response payload
+                                Cursor crr = db.getAllmesure();
+                                if (crr.getCount() == 0) {
+                                    ODataProperty property1;
+                                    ODataPropMap properties1;
 
 
-                                     //Get the response payload
-                                     ODataEntitySet feed1 = (ODataEntitySet) resp1.getPayload();
-                                     //Get the list of ODataEntity
-
-                                     entities1 = feed1.getEntities();
-
-                                     for (ODataEntity entity1 : entities1) {
-                                         properties1 = entity1.getProperties();
-
-
-                                /*motiff = (String) properties1.get("ZsdMotif").getValue();
-                                mesure = (String) properties1.get("ZsdDesignation").getValue();*/
-                                         db.addmesure((String) properties1.get("ZsdMotif").getValue(), (String) properties1.get("ZsdDesignation").getValue(), (String) properties1.get("Stat").getValue());
-
-                                         //Toast.makeText(getApplicationContext(), mesure + "mesure", Toast.LENGTH_SHORT).show();
+                                    ODataResponseSingle resp1 = null;
+                                    try {
+                                        resp1 = store.executeReadEntitySet(
+                                                "MESURESet", null);
+                                    } catch (ODataNetworkException e) {
+                                        e.printStackTrace();
+                                    } catch (ODataParserException e) {
+                                        e.printStackTrace();
+                                    } catch (ODataContractViolationException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //Get the response payload
 
 
-                                         ////////////////////////////////////////////////////////
+                                    //Get the response payload
+                                    ODataEntitySet feed1 = (ODataEntitySet) resp1.getPayload();
+                                    //Get the list of ODataEntity
 
+                                    entities1 = feed1.getEntities();
 
-                                     }
-
-                                 }
-
-                                 Cursor cr1 = db.getAlldiv();
-                                 if (cr1.getCount() == 0) {
-
-                                     ODataProperty property2;
-                                     ODataPropMap properties2;
-
-
-                                     ODataResponseSingle resp2 = null;
-                                     try {
-                                         resp2 = store.executeReadEntitySet(
-                                                 "DivisonSet", null);
-                                     } catch (ODataNetworkException e) {
-                                         e.printStackTrace();
-                                     } catch (ODataParserException e) {
-                                         e.printStackTrace();
-                                     } catch (ODataContractViolationException e) {
-                                         e.printStackTrace();
-                                     }
-                                     //Get the response payload
-
-
-                                     //Get the response payload
-                                     ODataEntitySet feed2 = (ODataEntitySet) resp2.getPayload();
-                                     //Get the list of ODataEntity
-
-                                     entities2 = feed2.getEntities();
-
-                                     for (ODataEntity entity2 : entities2) {
-                                         properties2 = entity2.getProperties();
+                                    for (ODataEntity entity1 : entities1) {
+                                        properties1 = entity1.getProperties();
 
 
                                 /*motiff = (String) properties1.get("ZsdMotif").getValue();
                                 mesure = (String) properties1.get("ZsdDesignation").getValue();*/
-                                         db.adddivision((String) properties2.get("Werks").getValue() + " " + (String) properties2.get("Name1").getValue());
+                                        db.addmesure((String) properties1.get("ZsdMotif").getValue(), (String) properties1.get("ZsdDesignation").getValue(), (String) properties1.get("Stat").getValue());
+
+                                        //Toast.makeText(getApplicationContext(), mesure + "mesure", Toast.LENGTH_SHORT).show();
 
 
-                                     }
-                                 }
-
-                                 Cursor cr2 = db.getAllrelais();
-                                 if (cr2.getCount() == 0) {
-
-                                     ODataProperty property3;
-                                     ODataPropMap properties3;
-
-                                     Log.e("han3", "han3");
-
-                                     ODataResponseSingle resp3 = null;
-                                     try {
-                                         resp3 = store.executeReadEntitySet(
-                                                 "RelaisSet", null);
-                                     } catch (ODataNetworkException e) {
-                                         e.printStackTrace();
-                                         Log.e("han4", e.toString());
-                                     } catch (ODataParserException e) {
-                                         e.printStackTrace();
-
-                                         Log.e("han5", e.toString());
-                                     } catch (ODataContractViolationException e) {
-                                         e.printStackTrace();
-                                         Log.e("han6", e.toString());
-                                     }
-                                     //Get the response payload
+                                        ////////////////////////////////////////////////////////
 
 
-                                     //Get the response payload
-                                     ODataEntitySet feed3 = (ODataEntitySet) resp3.getPayload();
-                                     //Get the list of ODataEntity
+                                    }
 
-                                     entities3 = feed3.getEntities();
+                                }
 
-                                     for (ODataEntity entity3 : entities3) {
-                                         properties3 = entity3.getProperties();
+                                Cursor cr1 = db.getAlldiv();
+                                if (cr1.getCount() == 0) {
+
+                                    ODataProperty property2;
+                                    ODataPropMap properties2;
+
+
+                                    ODataResponseSingle resp2 = null;
+                                    try {
+                                        resp2 = store.executeReadEntitySet(
+                                                "DivisonSet", null);
+                                    } catch (ODataNetworkException e) {
+                                        e.printStackTrace();
+                                    } catch (ODataParserException e) {
+                                        e.printStackTrace();
+                                    } catch (ODataContractViolationException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //Get the response payload
+
+
+                                    //Get the response payload
+                                    ODataEntitySet feed2 = (ODataEntitySet) resp2.getPayload();
+                                    //Get the list of ODataEntity
+
+                                    entities2 = feed2.getEntities();
+
+                                    for (ODataEntity entity2 : entities2) {
+                                        properties2 = entity2.getProperties();
 
 
                                 /*motiff = (String) properties1.get("ZsdMotif").getValue();
                                 mesure = (String) properties1.get("ZsdDesignation").getValue();*/
-                                         db.addrelais((String) properties3.get("Pudoid").getValue() + "  " + (String) properties3.get("Designation").getValue());
+                                        db.adddivision((String) properties2.get("Werks").getValue() + " " + (String) properties2.get("Name1").getValue());
 
 
-                                     }
-                                 }
+                                    }
+                                }
 
-                             }
+                                Cursor cr2 = db.getAllrelais();
+                                if (cr2.getCount() == 0) {
+
+                                    ODataProperty property3;
+                                    ODataPropMap properties3;
+
+                                    Log.e("han3", "han3");
+
+                                    ODataResponseSingle resp3 = null;
+                                    try {
+                                        resp3 = store.executeReadEntitySet(
+                                                "RelaisSet", null);
+                                    } catch (ODataNetworkException e) {
+                                        e.printStackTrace();
+                                        Log.e("han4", e.toString());
+                                    } catch (ODataParserException e) {
+                                        e.printStackTrace();
+
+                                        Log.e("han5", e.toString());
+                                    } catch (ODataContractViolationException e) {
+                                        e.printStackTrace();
+                                        Log.e("han6", e.toString());
+                                    }
+                                    //Get the response payload
 
 
-                         }
+                                    //Get the response payload
+                                    ODataEntitySet feed3 = (ODataEntitySet) resp3.getPayload();
+                                    //Get the list of ODataEntity
 
-                     });
-                 }
+                                    entities3 = feed3.getEntities();
+
+                                    for (ODataEntity entity3 : entities3) {
+                                        properties3 = entity3.getProperties();
+
+
+                                /*motiff = (String) properties1.get("ZsdMotif").getValue();
+                                mesure = (String) properties1.get("ZsdDesignation").getValue();*/
+                                        db.addrelais((String) properties3.get("Pudoid").getValue() + "  " + (String) properties3.get("Designation").getValue());
+
+
+                                    }
+                                }
+
+                            }
+
+
+                        }
+
+                    });
+                }
 
             }
 
@@ -2900,20 +2740,7 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
         });
 
 
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
 
 
 }

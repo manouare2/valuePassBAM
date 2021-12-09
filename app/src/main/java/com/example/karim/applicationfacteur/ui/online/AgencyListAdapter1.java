@@ -88,17 +88,17 @@ import static com.example.karim.applicationfacteur.ui.main.myActivity.url_g;
 public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filterable {
 
     final private LayoutInflater inflater;
-    UIListener ui= this;
+    UIListener ui = this;
 
     public static int TYPE_WIFI = 1;
     public static int TYPE_MOBILE = 2;
     public static int TYPE_NOT_CONNECTED = 0;
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
-    private boolean internetConnected=true;
-    private  boolean a;
+    private boolean internetConnected = true;
+    private boolean a;
     private SQLiteHandler db;
-    boolean insert= false;
+    boolean insert = false;
     int taille;
 
     Agency3 agency;
@@ -107,21 +107,20 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
     protected SessionManager session;
     String code_envoi;
     LogonCoreContext lgtx;
- 
 
 
     private List<Agency3> agencies;
     private List<Agency3> displayedAgencies;
     final private ListView myList;
     private ImageButton agency_id;
-    private TextView agency_name,agency_location;
+    private TextView agency_name, agency_location;
 
     public AgencyListAdapter1(AgencyListFragment1 fragment, ListView myList, LayoutInflater inflater, List<Agency3> agencies, Context ctx) {
         this.inflater = inflater;
         this.myList = myList;
         this.agencies = agencies;
-        this.displayedAgencies = agencies;
-        this.ctx=ctx;
+        this.displayedAgencies = new ArrayList<>(agencies);
+        this.ctx = ctx;
         this.fragment = fragment;
 
 
@@ -129,12 +128,12 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
     @Override
     public int getCount() {
-        return (displayedAgencies!=null)?displayedAgencies.size():0;
+        return (displayedAgencies != null) ? displayedAgencies.size() : 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return (displayedAgencies!=null)?displayedAgencies.get(position):null;
+        return (displayedAgencies != null) ? displayedAgencies.get(position) : null;
     }
 
     @Override
@@ -152,59 +151,43 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
         final Agency3 agency = displayedAgencies.get(position);
 
 
-        agency_location= (TextView) view.findViewById(R.id.agency_location);
+        agency_location = (TextView) view.findViewById(R.id.agency_location);
         agency_location.setText(agency.getObj());
 
 
-        agency_name= (TextView) view.findViewById(R.id.agency_name);
+        agency_name = (TextView) view.findViewById(R.id.agency_name);
         agency_name.setText(agency.getCode_envoi());
 
 
-        agency_name= (TextView) view.findViewById(R.id.agency_name);
+        agency_name = (TextView) view.findViewById(R.id.agency_name);
         agency_name.setText(agency.getCode_envoi());
 
 
-
-        agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0,0,0);
-
-
-       if(agency.getMode_liv().equalsIgnoreCase("Point de relais") &&( agency.getDesignation().equalsIgnoreCase("PREUVE D'OBJET DISTRIBUÉ") || agency.getDesignation().equalsIgnoreCase("POD")) )
-        {
+        agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
 
-          agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.abc,R.drawable.abb);
-      }
-
-       if (agency.getMode_liv().equalsIgnoreCase("Point de relais"))
-
-        {
+        if (agency.getMode_liv().equalsIgnoreCase("Point de relais") && (agency.getDesignation().equalsIgnoreCase("PREUVE D'OBJET DISTRIBUÉ") || agency.getDesignation().equalsIgnoreCase("POD"))) {
 
 
-            agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.abc,0);
-
-
-
-
+            agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abc, R.drawable.abb);
         }
 
+        if (agency.getMode_liv().equalsIgnoreCase("Point de relais")) {
 
 
-
-     else if( agency.getService().equalsIgnoreCase("PREUVE D'OBJET DISTRIBUÉ") || agency.getDesignation().equalsIgnoreCase("POD"))
-
-        {
+            agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abc, 0);
 
 
-            agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.abb,0);
-            Log.e(agency.getCode_envoi(),agency.getService());
+        } else if (agency.getService().equalsIgnoreCase("PREUVE D'OBJET DISTRIBUÉ") || agency.getDesignation().equalsIgnoreCase("POD")) {
 
 
+            agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abb, 0);
+            Log.e(agency.getCode_envoi(), agency.getService());
+
+
+        } else {
+            agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        else
-       {
-           agency_name.setCompoundDrawablesWithIntrinsicBounds(0, 0,0,0);
-       }
-
 
 
         //((TextView) view.findViewById(R.id.agency_id)).setText(agency.getAgencyId());
@@ -212,9 +195,8 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
         view.setOnClickListener(new AgencyListClickListener(displayedAgencies.get(position)));
         view.setOnLongClickListener(new AgencyListLongClickListener(position));
-        agency_id= (ImageButton) view.findViewById(R.id.agency_id);
+        agency_id = (ImageButton) view.findViewById(R.id.agency_id);
         final View finalView = view;
-
 
 
         agency_id.setOnClickListener(new View.OnClickListener() {
@@ -222,54 +204,48 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
             public void onClick(final View v) {
 
 
-              final Cursor cursor1 = db.getFlag(agency.getCode_envoi());
+                final Cursor cursor1 = db.getFlag(agency.getCode_envoi());
 
                 for (cursor1.moveToFirst(); !cursor1.isAfterLast(); cursor1.moveToNext()) {
 
-                  if(cursor1.getString(15).equalsIgnoreCase("1"))
-                  {
-                      TextView myMsg = new TextView(v.getRootView().getContext());
-                      myMsg.setText("Etes vous sur de  supprimer l'envoi:");
-                      myMsg.setGravity(Gravity.NO_GRAVITY);
+                    if (cursor1.getString(15).equalsIgnoreCase("1")) {
+                        TextView myMsg = new TextView(v.getRootView().getContext());
+                        myMsg.setText("Etes vous sur de  supprimer l'envoi:");
+                        myMsg.setGravity(Gravity.NO_GRAVITY);
 
 
-                      myMsg.setTextColor(Color.WHITE);
+                        myMsg.setTextColor(Color.WHITE);
 
-                      AlertDialog.Builder builder = new AlertDialog.Builder(v.getRootView().getContext());
-                      builder.setTitle(myMsg.getText().toString());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getRootView().getContext());
+                        builder.setTitle(myMsg.getText().toString());
 
-                      builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                          @Override
-                          public void onClick(DialogInterface dialog, int which) {
+                        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                            Cursor cr =  db.getenvoipr(agency.getCode_envoi(),"");
-
-
-                      Log.e("h1", String.valueOf(cr.getCount()));
+                                Cursor cr = db.getenvoipr(agency.getCode_envoi(), "");
 
 
-                              for (cr.moveToFirst(); !cr.isAfterLast(); cr.moveToNext()) {
-
-                                  Log.e("h2", cr.getString(0));
+                                Log.e("h1", String.valueOf(cr.getCount()));
 
 
-                              }
+                                for (cr.moveToFirst(); !cr.isAfterLast(); cr.moveToNext()) {
+
+                                    Log.e("h2", cr.getString(0));
 
 
-
-                              if(cr.getCount()!=0)
-                              {
-                                  supp(agency.getCode_envoi(),position);
-
-                                  fragment.onResume();
-
-                              }
-
-                              else {
+                                }
 
 
+                                if (cr.getCount() != 0) {
+                                    supp(agency.getCode_envoi(), position);
 
-                                     Cursor cursor = null;
+                                    fragment.onResume();
+
+                                } else {
+
+
+                                    Cursor cursor = null;
 
 
                                     /* for (cr.moveToFirst(); !cr.isAfterLast(); cr.moveToNext()) {
@@ -278,174 +254,147 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
                                       }*/
 
-                                  cursor = db.getenvoipere(agency.getCode_envoi());
+                                    cursor = db.getenvoipere(agency.getCode_envoi());
 
-                                  final ArrayList<String> str = new ArrayList<String>();
+                                    final ArrayList<String> str = new ArrayList<String>();
 
-                                  Log.e("han", String.valueOf(cr.getCount()));
-                                  Log.e("han1", String.valueOf(cursor.getCount()));
-
-
-
-                                  for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                                    Log.e("han", String.valueOf(cr.getCount()));
+                                    Log.e("han1", String.valueOf(cursor.getCount()));
 
 
-                                      Log.e("han3", "");
+                                    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
 
-                                                  str.add(cursor.getString(1));
-
-                                  }
+                                        Log.e("han3", "");
 
 
+                                        str.add(cursor.getString(1));
+
+                                    }
 
 
 //                                  Log.e("size", String.valueOf(str.length));
-                                  AlertDialog.Builder builderSingle = new AlertDialog.Builder(ctx);
+                                    AlertDialog.Builder builderSingle = new AlertDialog.Builder(ctx);
 
 
-
-                                      builderSingle.setIcon(R.drawable.sap_uex_alert_dialog_icon_gold);
-                                      builderSingle.setTitle("supprimer tous les envois groupés ?");
-
-
-                                  final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                                          ctx, android.R.layout.simple_dropdown_item_1line);
+                                    builderSingle.setIcon(R.drawable.sap_uex_alert_dialog_icon_gold);
+                                    builderSingle.setTitle("supprimer tous les envois groupés ?");
 
 
-
-                                  for (int j = 0; j < str.size(); j++) {
-                                      arrayAdapter.add(str.get(j));
-
-
-                                  }
-
-                                  builderSingle.setNegativeButton("Annuler",
-                                          new DialogInterface.OnClickListener() {
-
-                                              @Override
-                                              public void onClick(DialogInterface dialog, int which) {
-                                                  dialog.dismiss();
-                                              }
-                                          });
+                                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                                            ctx, android.R.layout.simple_dropdown_item_1line);
 
 
-                                  builderSingle.setPositiveButton("Ok",
-                                          new DialogInterface.OnClickListener() {
-
-                                              @Override
-                                              public void onClick(DialogInterface dialog, int which) {
-
-                                                  for (int j = 0; j < arrayAdapter.getCount(); j++) {
-
-                                                           supp(arrayAdapter.getItem(j).toString(),position);
-                                                           fragment.onResume();
-                                                  }
+                                    for (int j = 0; j < str.size(); j++) {
+                                        arrayAdapter.add(str.get(j));
 
 
-                                              }
-                                          });
+                                    }
+
+                                    builderSingle.setNegativeButton("Annuler",
+                                            new DialogInterface.OnClickListener() {
+
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
 
 
-                                  builderSingle.
-                                          setAdapter(arrayAdapter,
-                                                  new DialogInterface.OnClickListener() {
+                                    builderSingle.setPositiveButton("Ok",
+                                            new DialogInterface.OnClickListener() {
 
-                                                      @Override
-                                                      public void onClick(DialogInterface dialog, int which) {
-                                                          String strName = arrayAdapter.getItem(which);
-                                                      }
-                                                  });
-                                  builderSingle.create();
-                                  builderSingle.show();
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
 
+                                                    for (int j = 0; j < arrayAdapter.getCount(); j++) {
 
-                              }
+                                                        supp(arrayAdapter.getItem(j).toString(), position);
+                                                        fragment.onResume();
+                                                    }
 
 
+                                                }
+                                            });
 
 
-                          }
-                      });
+                                    builderSingle.
+                                            setAdapter(arrayAdapter,
+                                                    new DialogInterface.OnClickListener() {
 
-                      builder.setNeutralButton("Non", new DialogInterface.OnClickListener() {
-                          @Override
-                          public void onClick(DialogInterface dialog, int which) {
-
-                          }
-                      });
-
-
-                      AlertDialog alert1 = builder.create();
-
-                      alert1.show();
-
-                      }
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            String strName = arrayAdapter.getItem(which);
+                                                        }
+                                                    });
+                                    builderSingle.create();
+                                    builderSingle.show();
 
 
-
-                  else
-                  {
-
-                      TextView myMsg = new TextView(v.getRootView().getContext());
-                      myMsg.setText("Attention");
-                      myMsg.setGravity(Gravity.NO_GRAVITY);
-
-                      myMsg.setTextColor(Color.WHITE);
-
-                      AlertDialog.Builder builder = new AlertDialog.Builder(v.getRootView().getContext());
-                      builder.setTitle(myMsg.getText().toString());
-                      builder.setIcon(R.drawable.sap_uex_alert_dialog_icon_gold);
-                      builder.setMessage("Vous ne pouvez pas supprimer cet envoi");
+                                }
 
 
-                      builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                          @Override
-                          public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+
+                        builder.setNeutralButton("Non", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
 
 
-                       dialog.dismiss();
+                        AlertDialog alert1 = builder.create();
+
+                        alert1.show();
+
+                    } else {
+
+                        TextView myMsg = new TextView(v.getRootView().getContext());
+                        myMsg.setText("Attention");
+                        myMsg.setGravity(Gravity.NO_GRAVITY);
+
+                        myMsg.setTextColor(Color.WHITE);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getRootView().getContext());
+                        builder.setTitle(myMsg.getText().toString());
+                        builder.setIcon(R.drawable.sap_uex_alert_dialog_icon_gold);
+                        builder.setMessage("Vous ne pouvez pas supprimer cet envoi");
 
 
-                          }
-                      });
-                      builder.setNeutralButton("Annuler", new DialogInterface.OnClickListener() {
-                          @Override
-                          public void onClick(DialogInterface dialog, int which) {
-                              dialog.dismiss();
-
-                          }
-                      });
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
 
-                      AlertDialog alert1 = builder.create();
-
-                      alert1.show();
+                                dialog.dismiss();
 
 
+                            }
+                        });
+                        builder.setNeutralButton("Annuler", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+
+                            }
+                        });
 
 
+                        AlertDialog alert1 = builder.create();
 
-                  }
+                        alert1.show();
+
+
+                    }
 
 
                 }
 
 
-
-
-
-
-
-
-
-
-
-
-
             }
         });
-
 
 
         return view;
@@ -462,9 +411,9 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
         myList.setItemChecked(i, false);
         displayedAgencies.remove(i);
         notifyDataSetChanged();
-         taille =displayedAgencies.size()+1;
+        taille = displayedAgencies.size() + 1;
         fragment.changeToggleText();
-        AgencyListFragment1 frag =fragment;
+        AgencyListFragment1 frag = fragment;
 
 
     }
@@ -489,8 +438,12 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
     }
 
+    public ArrayList<Agency3> willGetDisplayedData() {
+        return (ArrayList<Agency3>) this.displayedAgencies;
+    }
+
     @Override
-    public  Filter getFilter() {
+    public Filter getFilter() {
         Filter filter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
@@ -503,10 +456,9 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
                 if (charSequence == null || charSequence.length() == 0) {
                     filterResults.count = agencies.size();
                     filterResults.values = agencies;
-                }
-                else {
+                } else {
                     charSequence = charSequence.toString().toLowerCase();
-                    for(int i = 0; i < agencies.size(); i++) {
+                    for (int i = 0; i < agencies.size(); i++) {
                         String data = agencies.get(i).getCode_envoi();
                         if (data.toLowerCase().startsWith(charSequence.toString())) {
                             filteredList.add(agencies.get(i));
@@ -516,19 +468,36 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
                     filterResults.values = filteredList;
                 }
 
+                displayedAgencies = (List<Agency3>) filterResults.values;
+
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                displayedAgencies = (List<Agency3>) filterResults.values;
                 notifyDataSetChanged();
-
             }
         };
         return filter;
     }
 
+
+    public void filter(String needle) {
+        displayedAgencies.clear();
+        if (needle == null || needle.length() == 0) {
+            displayedAgencies.addAll(agencies);
+        } else {
+            needle = needle.toLowerCase();
+            for (int i = 0; i < agencies.size(); i++) {
+                String data = agencies.get(i).getCode_envoi();
+                if (data.toLowerCase().startsWith(needle)) {
+                    displayedAgencies.add(agencies.get(i));
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
     /**
      * This listener handles clicks on a travel agency in the list.
      */
@@ -568,20 +537,12 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
     }
 
 
-
-
-
-
-
-
-
-
-    private  void  suppenvoi(LogonCoreContext lgtx, String code_envoi,int position) {
+    private void suppenvoi(LogonCoreContext lgtx, String code_envoi, int position) {
 
         session = new SessionManager(ctx);
         Agency1 agen = null;
         CredentialsProvider1 credProvider = CredentialsProvider1
-                .getInstance(lgtx,session.getUsername(),session.getPassword());
+                .getInstance(lgtx, session.getUsername(), session.getPassword());
 
         HttpConversationManager manager = new CommonAuthFlowsConfigurator(
                 ctx).supportBasicAuthUsing(credProvider).configure(
@@ -598,8 +559,8 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
         try {
             url = new URL(url_g);
-          //  url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-          //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            //  url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -617,45 +578,38 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
 
             String str = code_envoi;
-            str= str.replace(" " , "");
+            str = str.replace(" ", "");
             ///
             ODataResponseSingle resp = null;
 
 
-
             try {
-                resp=store.executeDeleteEntity("DNLPOSTESet(NumEnvoi='"+str+"')", null, null);
-               // deleteItem(position);
+                resp = store.executeDeleteEntity("DNLPOSTESet(NumEnvoi='" + str + "')", null, null);
+                // deleteItem(position);
                 //db.supprimer(str);
             } catch (Exception e) {
                 try {
                     throw new OnlineODataStoreException(e);
                 } catch (OnlineODataStoreException e1) {
                     e1.printStackTrace();
-                   // Toast.makeText(ctx,"une erreur est survenue, réssayer plus tard",Toast.LENGTH_LONG).show();
+                    // Toast.makeText(ctx,"une erreur est survenue, réssayer plus tard",Toast.LENGTH_LONG).show();
 
 
                 }
             }
 
-            if(resp==null)
-            {
-                Toast.makeText(ctx,"une erreur est survenue, réssayer plus tard",Toast.LENGTH_LONG).show();
+            if (resp == null) {
+                Toast.makeText(ctx, "une erreur est survenue, réssayer plus tard", Toast.LENGTH_LONG).show();
 
-            }
-
-            else
-            {
+            } else {
                 deleteItem(position);
                 db.supprimer(str);
 
             }
 
 
-
-        }
-        else {
-            Toast.makeText(ctx,"une erreur est survenue, réssayer plus tard",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(ctx, "une erreur est survenue, réssayer plus tard", Toast.LENGTH_LONG).show();
 
         }
 
@@ -663,27 +617,7 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private void supp(String code_envoi,int pos) {
+    private void supp(String code_envoi, int pos) {
 
 
         session = new SessionManager(ctx);
@@ -706,8 +640,8 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
 
         try {
-          //  url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-             url = new URL(url_g);
+            //  url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            url = new URL(url_g);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -771,10 +705,8 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
                 property = properties.get("Stat");
 
-                if (property.getValue().equals("OK"))
-
-                {
-                   SQLiteHandler db= new SQLiteHandler(ctx);
+                if (property.getValue().equals("OK")) {
+                    SQLiteHandler db = new SQLiteHandler(ctx);
                     String str = code_envoi;
 
                     str = str.replace(" ", "");
@@ -798,29 +730,7 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void suppr_envoi(LogonCoreContext lgtx,String code_envoi, int pos)
-
-    {
+    public void suppr_envoi(LogonCoreContext lgtx, String code_envoi, int pos) {
 
         session = new SessionManager(ctx);
 
@@ -842,7 +752,7 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
 
         try {
-          //  url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            //  url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
             url = new URL(url_g);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -874,79 +784,76 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
             batchItem.setCustomTag("something to identify the request");
 
 
+            newEntity.getProperties().put("Objnr", new ODataPropertyDefaultImpl("Objnr", "12"));
+
+            newEntity.getProperties().put("Stat", new ODataPropertyDefaultImpl("Stat", "HH"));
 
 
-            newEntity.getProperties().put("Objnr", new ODataPropertyDefaultImpl("Objnr","12"));
-
-            newEntity.getProperties().put("Stat", new ODataPropertyDefaultImpl("Stat","HH"));
+            newEntity.getProperties().put("Num", new ODataPropertyDefaultImpl("Num", "1"));
 
 
-            newEntity.getProperties().put("Num", new ODataPropertyDefaultImpl("Num","1"));
+            // newEntity.getProperties().put("Zdate", new ODataPropertyDefaultImpl("Zdate",DateFormat.getDateInstance().format(new Date())));
 
 
-           // newEntity.getProperties().put("Zdate", new ODataPropertyDefaultImpl("Zdate",DateFormat.getDateInstance().format(new Date())));
+            //  newEntity.getProperties().put("Zheure", new ODataPropertyDefaultImpl("Zheure",""));
+
+            newEntity.getProperties().put("ZnumEnvoi", new ODataPropertyDefaultImpl("ZnumEnvoi", "AN123456719MA"));
+
+            newEntity.getProperties().put("ZmatAgent", new ODataPropertyDefaultImpl("ZmatAgent", "hh"));
 
 
-          //  newEntity.getProperties().put("Zheure", new ODataPropertyDefaultImpl("Zheure",""));
-
-            newEntity.getProperties().put("ZnumEnvoi", new ODataPropertyDefaultImpl("ZnumEnvoi","AN123456719MA"));
-
-            newEntity.getProperties().put("ZmatAgent", new ODataPropertyDefaultImpl("ZmatAgent","hh"));
+            newEntity.getProperties().put("ZcodeAgence", new ODataPropertyDefaultImpl("ZcodeAgence", "B100"));
 
 
-            newEntity.getProperties().put("ZcodeAgence", new ODataPropertyDefaultImpl("ZcodeAgence","B100"));
+            newEntity.getProperties().put("ZcodeRelais", new ODataPropertyDefaultImpl("ZcodeRelais", "MA67"));
 
 
-            newEntity.getProperties().put("ZcodeRelais", new ODataPropertyDefaultImpl("ZcodeRelais","MA67"));
+            newEntity.getProperties().put("Zmotif", new ODataPropertyDefaultImpl("Zmotif", "hh"));
+
+            newEntity.getProperties().put("Zmesure", new ODataPropertyDefaultImpl("Zmesure", "hh"));
 
 
-            newEntity.getProperties().put("Zmotif", new ODataPropertyDefaultImpl("Zmotif","hh"));
-
-            newEntity.getProperties().put("Zmesure", new ODataPropertyDefaultImpl("Zmesure","hh"));
+            newEntity.getProperties().put("ZprochAgence", new ODataPropertyDefaultImpl("ZprochAgence", ""));
 
 
-            newEntity.getProperties().put("ZprochAgence", new ODataPropertyDefaultImpl("ZprochAgence",""));
+            newEntity.getProperties().put("StatPrec", new ODataPropertyDefaultImpl("StatPrec", "E003"));
 
 
-            newEntity.getProperties().put("StatPrec", new ODataPropertyDefaultImpl("StatPrec","E003"));
+            newEntity.getProperties().put("NumPrec", new ODataPropertyDefaultImpl("NumPrec", "3"));
 
 
-            newEntity.getProperties().put("NumPrec", new ODataPropertyDefaultImpl("NumPrec","3"));
+            newEntity.getProperties().put("Stsma", new ODataPropertyDefaultImpl("Stsma", "ZSD_stat"));
 
 
-            newEntity.getProperties().put("Stsma", new ODataPropertyDefaultImpl("Stsma","ZSD_stat"));
+            newEntity.getProperties().put("Txt04", new ODataPropertyDefaultImpl("Txt04", "liv"));
+            newEntity.getProperties().put("Txt30", new ODataPropertyDefaultImpl("Txt30", "liv"));
 
 
-            newEntity.getProperties().put("Txt04", new ODataPropertyDefaultImpl("Txt04","liv"));
-            newEntity.getProperties().put("Txt30", new ODataPropertyDefaultImpl("Txt30","liv"));
+            //  newEntity.getProperties().put("ZdateAnnul", new ODataPropertyDefaultImpl("ZdateAnnul", DateFormat.getDateInstance().format(new Date())));
 
 
-          //  newEntity.getProperties().put("ZdateAnnul", new ODataPropertyDefaultImpl("ZdateAnnul", DateFormat.getDateInstance().format(new Date())));
+            newEntity.getProperties().put("ZheureAnnul", new ODataPropertyDefaultImpl("ZheureAnnul", "hh001"));
 
 
-            newEntity.getProperties().put("ZheureAnnul", new ODataPropertyDefaultImpl("ZheureAnnul","hh001"));
+            //  newEntity.getProperties().put("ZmatAgentAnnul", new ODataPropertyDefaultImpl("ZmatAgentAnnul",""));
 
 
-          //  newEntity.getProperties().put("ZmatAgentAnnul", new ODataPropertyDefaultImpl("ZmatAgentAnnul",""));
+            newEntity.getProperties().put("ZtypeBord", new ODataPropertyDefaultImpl("ZtypeBord", "pod"));
+
+            newEntity.getProperties().put("Annule", new ODataPropertyDefaultImpl("Annule", " ="));
 
 
-            newEntity.getProperties().put("ZtypeBord", new ODataPropertyDefaultImpl("ZtypeBord","pod"));
-
-            newEntity.getProperties().put("Annule", new ODataPropertyDefaultImpl("Annule"," ="));
+            newEntity.getProperties().put("Zvaguemestre", new ODataPropertyDefaultImpl("Zvaguemestre", ""));
 
 
-            newEntity.getProperties().put("Zvaguemestre", new ODataPropertyDefaultImpl("Zvaguemestre",""));
-
-
-            newEntity.getProperties().put("Procuration", new ODataPropertyDefaultImpl("Procuration",""));
-
+            newEntity.getProperties().put("Procuration", new ODataPropertyDefaultImpl("Procuration", ""));
 
 
             batchItem.setPayload(newEntity);
             //batchItem.setPayload(newEntity2);
 
 
-            Log.e("test","1");
+            Log.e("test", "1");
 
             Map<String, String> createHeaders = new HashMap<String, String>();
 
@@ -954,13 +861,13 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
             createHeaders.put("content-type", "application/atom+xml");
 
-            Log.e("test","2");
+            Log.e("test", "2");
             batchItem.setOptions(createHeaders);
 
 
             ODataRequestChangeSet changeSetItem = new ODataRequestChangeSetDefaultImpl();
 
-            Log.e("test","3");
+            Log.e("test", "3");
 
 
             try {
@@ -991,7 +898,7 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
                 Log.e("1", "15");
             } catch (ODataNetworkException e) {
                 e.printStackTrace();
-                Log.e("test8",e.toString());
+                Log.e("test8", e.toString());
 
 
             } catch (ODataParserException e) {
@@ -1001,7 +908,6 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
                 e.printStackTrace();
                 Log.e("e5", e.toString());
             }
-
 
 
             Log.e("test", "8");
@@ -1044,7 +950,7 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
 
                             String code = headerMap.get(ODataResponse.Headers.Code);
 
-                            Toast.makeText(ctx, "code"+code, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "code" + code, Toast.LENGTH_SHORT).show();
 
                             if (code.equalsIgnoreCase("201")) {
                                 Toast.makeText(ctx, "Les envois sont envoyés avec succès", Toast.LENGTH_SHORT).show();
@@ -1092,27 +998,13 @@ public class AgencyListAdapter1 extends BaseAdapter implements UIListener, Filte
             }
 
 
+        } else {
 
 
-        }
-
-
-        else
-        {
-
-
-            Toast.makeText(ctx,"une erreur est survenue, réssayer plus tard",Toast.LENGTH_LONG).show();
+            Toast.makeText(ctx, "une erreur est survenue, réssayer plus tard", Toast.LENGTH_LONG).show();
 
         }
     }
-
-
-
-
-
-
-
-
 
 
 }

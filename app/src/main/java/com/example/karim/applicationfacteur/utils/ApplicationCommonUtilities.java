@@ -1,4 +1,4 @@
-package com.example.karim.applicationfacteur;
+package com.example.karim.applicationfacteur.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
