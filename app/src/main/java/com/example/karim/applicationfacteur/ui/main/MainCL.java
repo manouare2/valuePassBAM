@@ -1,6 +1,8 @@
 package com.example.karim.applicationfacteur.ui.main;
 
 
+import static android.Manifest.permission.CAMERA;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Fragment;
@@ -13,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.graphics.BitmapFactory;
@@ -23,9 +26,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
@@ -56,6 +62,7 @@ import com.example.karim.applicationfacteur.ui.online.CollecteListActivity;
 import com.example.karim.applicationfacteur.ui.online.CollecteListFragment;
 import com.example.karim.applicationfacteur.ui.online.QRcollecteliv;
 import com.example.karim.applicationfacteur.ui.online.SQLiteHandler;
+import com.example.karim.applicationfacteur.utils.Constant;
 import com.facebook.network.connectionclass.ConnectionClassManager;
 import com.facebook.network.connectionclass.ConnectionQuality;
 import com.facebook.network.connectionclass.DeviceBandwidthSampler;
@@ -110,7 +117,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainCL extends AppCompatActivity {
-    public  static String  url_g = "http://testpda.barid.ma/sap/opu/odata/sap/Z_ODATA_BAM2_SRV";
+    public static String url_g = "http://testpda.barid.ma/sap/opu/odata/sap/Z_ODATA_BAM2_SRV";
     protected SessionManager session;
     private boolean internetConnected = true;
     public static int TYPE_WIFI = 1;
@@ -205,14 +212,39 @@ public class MainCL extends AppCompatActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constant.CAMERA_PERMISSION_REQUEST_CODE
+                && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            this.willStartCameraIntent();
+        }
+    }
+
+    private boolean checkCameraPermission() {
+        return (ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{CAMERA}, Constant.CAMERA_PERMISSION_REQUEST_CODE);
+    }
+
+    private void willStartCameraIntent() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        startActivity(intent);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.menu_item_dec)
             return deconnexion(this);
 
         else if (item.getItemId() == R.id.menu_item_photo) {
-            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-            startActivity(intent);
+            if (this.checkCameraPermission()) {
+                this.willStartCameraIntent();
+            } else // request camera permission
+                this.requestCameraPermission();
+
             return true;
 
 
@@ -233,163 +265,159 @@ public class MainCL extends AppCompatActivity {
             return true;
 //HHA 09/06/2020
 
-            } else if (item.getItemId() == R.id.menu_item_qr) {
+        } else if (item.getItemId() == R.id.menu_item_qr) {
 
 
-                Intent intent = new Intent(this, QRcollecteliv.class);
-                startActivity(intent);
-                return true;
-     //HHA 09/06/2020
+            Intent intent = new Intent(this, QRcollecteliv.class);
+            startActivity(intent);
+            return true;
+            //HHA 09/06/2020
         } else if (item.getItemId() == R.id.menu_chargm_cl) {
 
 
             Cursor cr = db.getnomclient();
 
 // 22/04/2020
-           // if (cr.getCount() == 0)
+            // if (cr.getCount() == 0)
 
             //{
 
-                if (registerInternetCheckReceiver(getApplication())) {
+            if (registerInternetCheckReceiver(getApplication())) {
 
 
-                    session = new SessionManager(getApplicationContext());
-                    login = session.getUsername();
-                    pwd = session.getPassword();
+                session = new SessionManager(getApplicationContext());
+                login = session.getUsername();
+                pwd = session.getPassword();
 
-                    CredentialsProvider1 credProvider = CredentialsProvider1
-                            .getInstance(lgtx, login, pwd);
+                CredentialsProvider1 credProvider = CredentialsProvider1
+                        .getInstance(lgtx, login, pwd);
 
-                    HttpConversationManager manager = new CommonAuthFlowsConfigurator(
-                            getApplicationContext()).supportBasicAuthUsing(credProvider).configure(
-                            new HttpConversationManager(getApplicationContext()));
+                HttpConversationManager manager = new CommonAuthFlowsConfigurator(
+                        getApplicationContext()).supportBasicAuthUsing(credProvider).configure(
+                        new HttpConversationManager(getApplicationContext()));
 
 
-                    XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
-                    XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(getApplicationContext(),
-                            requestFilter);
-                    manager.addFilter(requestFilter);
-                    manager.addFilter(responseFilter);
-                    URL url = null;
+                XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
+                XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(getApplicationContext(),
+                        requestFilter);
+                manager.addFilter(requestFilter);
+                manager.addFilter(responseFilter);
+                URL url = null;
+
+
+                try {
+                    url = new URL(url_g);
+                    //     url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                    //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+
+                }
+                //Method to open a new online store asynchronously
+
+
+                //Check if OnlineODataStore opened successfully
+                OnlineODataStore store = null;
+
+                try {
+                    store = OnlineODataStore.open(getApplication(), url, manager, null);
+                } catch (ODataException e) {
+                    e.printStackTrace();
+
+
+                }
+
+
+                if (store != null) {
+
+
+                    /************web service pr recupérer les clients de la colecte******/
+
+
+                    ODataProperty property1;
+                    ODataPropMap properties1;
+
+
+                    ODataResponseSingle resp1 = null;
 
 
                     try {
-                        url = new URL(url_g);
-                   //     url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                      //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-
-                    } catch (MalformedURLException e) {
+                        resp1 = store.executeReadEntitySet(
+                                "ZSD_FDR_CLIENTSet", null);
+                    } catch (ODataNetworkException e) {
                         e.printStackTrace();
-
-                    }
-                    //Method to open a new online store asynchronously
-
-
-                    //Check if OnlineODataStore opened successfully
-                    OnlineODataStore store = null;
-
-                    try {
-                        store = OnlineODataStore.open(getApplication(), url, manager, null);
-                    } catch (ODataException e) {
+                    } catch (ODataParserException e) {
                         e.printStackTrace();
 
 
+                    } catch (ODataContractViolationException e) {
+                        e.printStackTrace();
+
                     }
+                    //Get the response payload
 
 
-                    if (store != null) {
+                    //Get the response payload
 
 
-                        /************web service pr recupérer les clients de la colecte******/
+                    if (resp1 == null) {
 
 
-                        ODataProperty property1;
-                        ODataPropMap properties1;
+                    } else {
 
 
-                        ODataResponseSingle resp1 = null;
+                        ODataEntitySet feed1 = (ODataEntitySet) resp1.getPayload();
+                        //Get the list of ODataEntity
+
+                        entities1 = feed1.getEntities();
+                        if (entities1.size() != 0) {
 
 
-                        try {
-                            resp1 = store.executeReadEntitySet(
-                                    "ZSD_FDR_CLIENTSet", null);
-                        } catch (ODataNetworkException e) {
-                            e.printStackTrace();
-                        } catch (ODataParserException e) {
-                            e.printStackTrace();
+                            for (ODataEntity entity1 : entities1) {
 
+                                properties1 = entity1.getProperties();
+                                SQLiteHandler db = new SQLiteHandler(getApplication());
 
-                        } catch (ODataContractViolationException e) {
-                            e.printStackTrace();
-
-                        }
-                        //Get the response payload
-
-
-                        //Get the response payload
-
-
-                        if (resp1 == null) {
-
-
-                        } else {
-
-
-                            ODataEntitySet feed1 = (ODataEntitySet) resp1.getPayload();
-                            //Get the list of ODataEntity
-
-                            entities1 = feed1.getEntities();
-                            if (entities1.size() != 0) {
-
-
-                                for (ODataEntity entity1 : entities1) {
-
-                                    properties1 = entity1.getProperties();
-                                    SQLiteHandler db = new SQLiteHandler(getApplication());
-
-                                    db.addData_client((String) properties1.get("Kunnr").getValue(),
-                                            (String) properties1.get("Name").getValue(),
-                                            (String) properties1.get("ZnameCt").getValue(),
-                                            (String) properties1.get("AdrCl").getValue(),
-                                            (String) properties1.get("ZtelCt").getValue(),
-                                            (String) properties1.get("ZagenceId").getValue(), (String) properties1.get("ZagenceDes").getValue(), (String) properties1.get("Zregion").getValue(), (String) properties1.get("Zcode2d").getValue());
-
-                                }
-
-
-
-                                                                                Intent intent = new Intent(getApplication(), CreerCollecte.class);
-                                                                                //  intent.putExtra("code",String.valueOf(obj));
-                                                                                startActivity(intent);
-                                                                                finish();
-
+                                db.addData_client((String) properties1.get("Kunnr").getValue(),
+                                        (String) properties1.get("Name").getValue(),
+                                        (String) properties1.get("ZnameCt").getValue(),
+                                        (String) properties1.get("AdrCl").getValue(),
+                                        (String) properties1.get("ZtelCt").getValue(),
+                                        (String) properties1.get("ZagenceId").getValue(), (String) properties1.get("ZagenceDes").getValue(), (String) properties1.get("Zregion").getValue(), (String) properties1.get("Zcode2d").getValue());
 
                             }
 
 
+                            Intent intent = new Intent(getApplication(), CreerCollecte.class);
+                            //  intent.putExtra("code",String.valueOf(obj));
+                            startActivity(intent);
+                            finish();
+
+
                         }
 
 
                     }
 
 
-                } else {
-                    Toast.makeText(getApplication(), "Connectez-vous à internet et réessayez", Toast.LENGTH_SHORT).show();
-
                 }
+
+
+            } else {
+                Toast.makeText(getApplication(), "Connectez-vous à internet et réessayez", Toast.LENGTH_SHORT).show();
+
+            }
             //}
 
 
-        }
-        else if (item.getItemId() == R.id.menu_chargm_motif_cl) {
+        } else if (item.getItemId() == R.id.menu_chargm_motif_cl) {
 
 
             Cursor cr = db.getAllmotif_cl();
 
 
-            if (cr.getCount() == 0)
-
-            {
+            if (cr.getCount() == 0) {
 
                 if (registerInternetCheckReceiver(getApplication())) {
 
@@ -416,8 +444,8 @@ public class MainCL extends AppCompatActivity {
 
                     try {
                         url = new URL(url_g);
-                       // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                      //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                        // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                        //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
 
@@ -448,7 +476,6 @@ public class MainCL extends AppCompatActivity {
 
 
                         ODataResponseSingle resp1 = null;
-
 
 
                         try {
@@ -495,20 +522,10 @@ public class MainCL extends AppCompatActivity {
                                 }
 
 
-                                Intent intent = new Intent(getApplication(),Motif_CL.class);
+                                Intent intent = new Intent(getApplication(), Motif_CL.class);
                                 //  intent.putExtra("code",String.valueOf(obj));
                                 startActivity(intent);
                                 finish();
-
-
-
-
-
-
-
-
-
-
 
 
                             }
@@ -526,11 +543,8 @@ public class MainCL extends AppCompatActivity {
                 }
             }
         }
-            return super.onOptionsItemSelected(item);}
-
-
-
-
+        return super.onOptionsItemSelected(item);
+    }
 
 
     private void deleteAppData() {
@@ -569,13 +583,13 @@ public class MainCL extends AppCompatActivity {
         System.exit(2);
     }
 
-    public  boolean registerInternetCheckReceiver(Context ctx) {
+    public boolean registerInternetCheckReceiver(Context ctx) {
         IntentFilter internetFilter = new IntentFilter();
         internetFilter.addAction("android.net.wifi.STATE_CHANGE");
         internetFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         String status = getConnectivityStatusString(ctx);
         a = setSnackbarMessage(status, false);
-        ctx.registerReceiver(broadcastReceiver,internetFilter);
+        ctx.registerReceiver(broadcastReceiver, internetFilter);
         return a;
 
     }
@@ -726,9 +740,8 @@ public class MainCL extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onStop();
 
-        if(OnPause == true && OnResume == false)
-        {
-            Toast.makeText(this,"home",Toast.LENGTH_LONG).show();
+        if (OnPause == true && OnResume == false) {
+            Toast.makeText(this, "home", Toast.LENGTH_LONG).show();
             //Do Your Home press code Here.
 
         }
@@ -888,8 +901,8 @@ public class MainCL extends AppCompatActivity {
 
                         try {
                             url = new URL(url_g);
-                           // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                           // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                            // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                            // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
 
@@ -1024,8 +1037,6 @@ public class MainCL extends AppCompatActivity {
     }
 
 
-
-
     ////************************* List  des collectes de la FDR**************************////
 
 
@@ -1080,9 +1091,7 @@ public class MainCL extends AppCompatActivity {
                             Cursor cr = db.getFDR(login);
 
 
-                            if (cr.getCount() != 0)
-
-                            {
+                            if (cr.getCount() != 0) {
 
 
                                 for (cr.moveToFirst(); !cr.isAfterLast(); cr.moveToNext()) {
@@ -1154,8 +1163,8 @@ public class MainCL extends AppCompatActivity {
 
                         try {
                             url = new URL(url_g);
-                           // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                          //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                            // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                            //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
 
@@ -1252,7 +1261,7 @@ public class MainCL extends AppCompatActivity {
 
                                         ODataEntity newEntity = null;
                                         try {
-                                            newEntity = createAgencyEntityCL(store,ID,client);
+                                            newEntity = createAgencyEntityCL(store, ID, client);
                                         } catch (ODataParserException e) {
                                             e.printStackTrace();
                                         }
@@ -1269,19 +1278,17 @@ public class MainCL extends AppCompatActivity {
                                         }
 
 
-
-                                        db.addData_FDR((String)properties.get("ZfdrId").getValue(),
+                                        db.addData_FDR((String) properties.get("ZfdrId").getValue(),
                                                 (String) properties.get("Zposnr").getValue(),
-                                                client.replaceAll("^0+(?=.)", ""),(String) properties.get("Name").getValue(),
+                                                client.replaceAll("^0+(?=.)", ""), (String) properties.get("Name").getValue(),
                                                 (String) properties.get("ZnameCt").getValue(),
                                                 (String) properties.get("AdrCl").getValue(),
                                                 (String) properties.get("ZtelCt").getValue(),
                                                 (String) properties.get("ZdateEch").getValue(),
-                                                (String)(properties.get("ZheureEch").getValue()), session.getUsername(), "En cours", (String) properties.get("Agent").getValue(), (String) properties.get("Agence").getValue(), (String) properties.get("ZtypeCl").getValue(),"",(String) properties.get("Zcode2d").getValue(),"0","","");
+                                                (String) (properties.get("ZheureEch").getValue()), session.getUsername(), "En cours", (String) properties.get("Agent").getValue(), (String) properties.get("Agence").getValue(), (String) properties.get("ZtypeCl").getValue(), "", (String) properties.get("Zcode2d").getValue(), "0", "", "");
 
 
                                         Cursor cr = db.getFDR(session.getUsername());
-
 
 
                                         Log.e("size", String.valueOf(cr.getCount()));
@@ -1378,7 +1385,6 @@ public class MainCL extends AppCompatActivity {
                             }
 
 
-
                         }
                         Intent intent = new Intent(ctx, CollecteListActivity.class);
                         //  intent.putExtra("code",String.valueOf(obj));
@@ -1390,7 +1396,6 @@ public class MainCL extends AppCompatActivity {
                     }
 
                 });
-
 
 
             }
@@ -1452,158 +1457,144 @@ public class MainCL extends AppCompatActivity {
 
 /*******************************************/
 
-                     session = new SessionManager(getApplicationContext());
-                        login = session.getUsername();
-                        pwd = session.getPassword();
+        session = new SessionManager(getApplicationContext());
+        login = session.getUsername();
+        pwd = session.getPassword();
 
-                        CredentialsProvider1 credProvider = CredentialsProvider1
-                                .getInstance(lgtx, login, pwd);
+        CredentialsProvider1 credProvider = CredentialsProvider1
+                .getInstance(lgtx, login, pwd);
 
-                        HttpConversationManager manager = new CommonAuthFlowsConfigurator(
-                                getApplicationContext()).supportBasicAuthUsing(credProvider).configure(
-                                new HttpConversationManager(getApplicationContext()));
-
-
-                        XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
-                        XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(getApplicationContext(),
-                                requestFilter);
-                        manager.addFilter(requestFilter);
-                        manager.addFilter(responseFilter);
-                        URL url = null;
+        HttpConversationManager manager = new CommonAuthFlowsConfigurator(
+                getApplicationContext()).supportBasicAuthUsing(credProvider).configure(
+                new HttpConversationManager(getApplicationContext()));
 
 
-                        try {
-                            url = new URL(url_g);
-                        //    url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                         //   url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-
-                        }
-                        //Method to open a new online store asynchronously
+        XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
+        XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(getApplicationContext(),
+                requestFilter);
+        manager.addFilter(requestFilter);
+        manager.addFilter(responseFilter);
+        URL url = null;
 
 
-                        //Check if OnlineODataStore opened successfully
-                        OnlineODataStore store = null;
+        try {
+            url = new URL(url_g);
+            //    url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            //   url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
 
-                        try {
-                            store = OnlineODataStore.open(getApplication(), url, manager, null);
-                        } catch (ODataException e) {
-                            e.printStackTrace();
-
-
-                        }
-
-
-                        if (store != null) {
-
-                            ODataProperty property;
-                            ODataPropMap properties;
+        }
+        //Method to open a new online store asynchronously
 
 
-                            ODataResponseSingle resp = null;
-                            try {
-                                resp = store.executeReadEntitySet(
-                                        "ZSD_FDR_COLLECTESet", null);
-                            } catch (ODataNetworkException e) {
-                                e.printStackTrace();
-                            } catch (ODataParserException e) {
-                                e.printStackTrace();
+        //Check if OnlineODataStore opened successfully
+        OnlineODataStore store = null;
+
+        try {
+            store = OnlineODataStore.open(getApplication(), url, manager, null);
+        } catch (ODataException e) {
+            e.printStackTrace();
 
 
-                            } catch (ODataContractViolationException e) {
-                                e.printStackTrace();
-
-                            }
-                            //Get the response payload
+        }
 
 
-                            //Get the response payload
+        if (store != null) {
+
+            ODataProperty property;
+            ODataPropMap properties;
 
 
-                            if (resp == null) {
+            ODataResponseSingle resp = null;
+            try {
+                resp = store.executeReadEntitySet(
+                        "ZSD_FDR_COLLECTESet", null);
+            } catch (ODataNetworkException e) {
+                e.printStackTrace();
+            } catch (ODataParserException e) {
+                e.printStackTrace();
 
 
-                            } else {
+            } catch (ODataContractViolationException e) {
+                e.printStackTrace();
+
+            }
+            //Get the response payload
 
 
-                                ODataEntitySet feed = (ODataEntitySet) resp.getPayload();
-                                //Get the list of ODataEntity
-
-                                entities = feed.getEntities();
-
-                                if (entities.size() != 0)
-
-                                {
-                                    int i = 1;
-                                    for (ODataEntity entity : entities) {
-
-                                        properties = entity.getProperties();
-
-                                        db = new SQLiteHandler(getApplicationContext());
+            //Get the response payload
 
 
-                                        Log.e("kim", "1");
-
-                                        String type_cl = (String) properties.get("ZtypeCl").getValue();
-                                        if (type_cl.equalsIgnoreCase("D")) {
+            if (resp == null) {
 
 
+            } else {
 
 
+                ODataEntitySet feed = (ODataEntitySet) resp.getPayload();
+                //Get the list of ODataEntity
 
-                                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplication());
+                entities = feed.getEntities();
+
+                if (entities.size() != 0) {
+                    int i = 1;
+                    for (ODataEntity entity : entities) {
+
+                        properties = entity.getProperties();
+
+                        db = new SQLiteHandler(getApplicationContext());
 
 
+                        Log.e("kim", "1");
+
+                        String type_cl = (String) properties.get("ZtypeCl").getValue();
+                        if (type_cl.equalsIgnoreCase("D")) {
 
 
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplication());
 
 
-                                            Intent intentAction = new Intent(getApplicationContext(),ActionReceiver.class);
+                            Intent intentAction = new Intent(getApplicationContext(), ActionReceiver.class);
 
 //This is optional if you have more than one buttons and want to differentiate between two
-                                            intentAction.putExtra("action","actionName");
+                            intentAction.putExtra("action", "actionName");
 
-                                            PendingIntent pIntentlogin = PendingIntent.getBroadcast(getApplicationContext(),1,intentAction,PendingIntent.FLAG_UPDATE_CURRENT);
-                                              mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplication())
+                            PendingIntent pIntentlogin = PendingIntent.getBroadcast(getApplicationContext(), 1, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
+                            mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplication())
 
-                                                      .setColor(getApplication().getResources().getColor(R.color.blue))
-                                                      .setSmallIcon(R.drawable.ic_action_not)
-                                                      .setLargeIcon(BitmapFactory.decodeResource(getApplication().getResources(), R.mipmap.ic_launcher))
-
-
-
-                                                      .setContentTitle("Vous avez une nouvelle collecte")
-                                                      .setContentText((String) properties.get("Name").getValue())
-
-                                                      .setVibrate(new long[]{100, 250})
-                                                      .setAutoCancel(true)
-                                                      .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
+                                    .setColor(getApplication().getResources().getColor(R.color.blue))
+                                    .setSmallIcon(R.drawable.ic_action_not)
+                                    .setLargeIcon(BitmapFactory.decodeResource(getApplication().getResources(), R.mipmap.ic_launcher))
 
 
+                                    .setContentTitle("Vous avez une nouvelle collecte")
+                                    .setContentText((String) properties.get("Name").getValue())
+
+                                    .setVibrate(new long[]{100, 250})
+                                    .setAutoCancel(true)
+                                    .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
 
 
+                                    //Using this action button I would like to call logTest
+                                    .addAction(R.drawable.ic_action_synn, "Charger FDR", pIntentlogin)
+                                    .setOngoing(true);
 
+                            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-                                            //Using this action button I would like to call logTest
-                                                    .addAction(R.drawable.ic_action_synn, "Charger FDR", pIntentlogin)
-                                                    .setOngoing(true);
-
-                                            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                                            mNotificationManager.notify(i++, mBuilder.build());
-                                            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-                                        }
-
-                                    }
-
-
-                                }
-
-                            }
+                            mNotificationManager.notify(i++, mBuilder.build());
+                            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
                         }
+
+                    }
+
+
+                }
+
+            }
+
+        }
 
     }
 
@@ -1615,17 +1606,11 @@ public class MainCL extends AppCompatActivity {
     // });
 
 
-
-
-
-
-
-
-    private static ODataEntity createAgencyEntityCL(OnlineODataStore store, String ID,String num_client) throws ODataParserException {
+    private static ODataEntity createAgencyEntityCL(OnlineODataStore store, String ID, String num_client) throws ODataParserException {
         //BEGIN
-        Log.e("1","1");
+        Log.e("1", "1");
         ODataEntity newEntity = null;
-        if (store!=null) {
+        if (store != null) {
 
             newEntity = new ODataEntityDefaultImpl("Z_ODATA_BAM2_SRV.ZSD_FDR_COLLECTE");
 
@@ -1636,19 +1621,15 @@ public class MainCL extends AppCompatActivity {
             }
             //If available, it populates the navigation properties of an OData Entity
             store.allocateNavigationProperties(newEntity);
-            Log.e("2","2");
-           /* newEntity.getProperties().put("ZnumObj",new ODataPropertyDefaultImpl("ZnumObj",0000000655));*/
+            Log.e("2", "2");
+            /* newEntity.getProperties().put("ZnumObj",new ODataPropertyDefaultImpl("ZnumObj",0000000655));*/
 
-            newEntity.getProperties().put("ZfdrId",new ODataPropertyDefaultImpl("ZfdrId",ID));
-
-
-
+            newEntity.getProperties().put("ZfdrId", new ODataPropertyDefaultImpl("ZfdrId", ID));
 
 
             //String resourcePath =("ZSD_FDR_COLLECTESet('" + ID + "')");
 
-            String resourcePath =("ZSD_FDR_COLLECTESet(Kunnr='"+ num_client +"',ZheureEch='" + "',ZfdrId='" + ID + "')");
-
+            String resourcePath = ("ZSD_FDR_COLLECTESet(Kunnr='" + num_client + "',ZheureEch='" + "',ZfdrId='" + ID + "')");
 
 
             newEntity.setResourcePath(resourcePath, resourcePath);
@@ -1661,17 +1642,10 @@ public class MainCL extends AppCompatActivity {
     }
 
 
-
-
     /*************Traitement de la collecte*********/
 
 
-
-
-
-    public static void InsertENVOI(final Context ctx, Collecte CL, List<Envoi> list, String heure, String motifID, String designation,Activity ac,String statut_cl)
-
-    {
+    public static void InsertENVOI(final Context ctx, Collecte CL, List<Envoi> list, String heure, String motifID, String designation, Activity ac, String statut_cl) {
 
 
         db = new SQLiteHandler(ctx);
@@ -1696,8 +1670,8 @@ public class MainCL extends AppCompatActivity {
 
         try {
             url = new URL(url_g);
-           // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-          //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            // url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            //  url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -1723,19 +1697,16 @@ public class MainCL extends AppCompatActivity {
 
         batchItem.setCustomTag("something to identify the request");
 
-        if(list==null)
-
-        {
+        if (list == null) {
 
             newEntity.getProperties().put("ZfdrId", new ODataPropertyDefaultImpl("ZfdrId", CL.getNum_fdr()));
             newEntity.getProperties().put("Zposnr", new ODataPropertyDefaultImpl("Zposnr", CL.getNum_poste()));
             newEntity.getProperties().put("Kunnr", new ODataPropertyDefaultImpl("Kunnr", CL.getNum_client()));
-            newEntity.getProperties().put("ZcodeEnvoi", new ODataPropertyDefaultImpl("ZcodeEnvoi",""));
+            newEntity.getProperties().put("ZcodeEnvoi", new ODataPropertyDefaultImpl("ZcodeEnvoi", ""));
             newEntity.getProperties().put("ZheureTr", new ODataPropertyDefaultImpl("ZheureTr", heure));
-            newEntity.getProperties().put("ZnbEnvois", new ODataPropertyDefaultImpl("ZnbEnvois",""));
-            newEntity.getProperties().put("ZmotifAutres", new ODataPropertyDefaultImpl("ZmotifAutres",designation));
-            newEntity.getProperties().put("Zstatut_cl", new ODataPropertyDefaultImpl("Zstatut_cl",statut_cl));
-
+            newEntity.getProperties().put("ZnbEnvois", new ODataPropertyDefaultImpl("ZnbEnvois", ""));
+            newEntity.getProperties().put("ZmotifAutres", new ODataPropertyDefaultImpl("ZmotifAutres", designation));
+            newEntity.getProperties().put("Zstatut_cl", new ODataPropertyDefaultImpl("Zstatut_cl", statut_cl));
 
 
             batchItem.setPayload(newEntity);
@@ -1790,11 +1761,7 @@ public class MainCL extends AppCompatActivity {
             }
 
 
-        }
-
-
-
-        else {
+        } else {
             for (int i = 0; i < list.size(); i++) {
 
 
@@ -1804,8 +1771,8 @@ public class MainCL extends AppCompatActivity {
                 newEntity.getProperties().put("ZcodeEnvoi", new ODataPropertyDefaultImpl("ZcodeEnvoi", list.get(i).getCode_envoi()));
                 newEntity.getProperties().put("ZheureTr", new ODataPropertyDefaultImpl("ZheureTr", heure));
                 newEntity.getProperties().put("ZnbEnvois", new ODataPropertyDefaultImpl("ZnbEnvois", String.valueOf(list.size())));
-                newEntity.getProperties().put("ZmotifAutres", new ODataPropertyDefaultImpl("ZmotifAutres",""));
-                newEntity.getProperties().put("Zstatut_cl", new ODataPropertyDefaultImpl("Zstatut_cl",statut_cl));
+                newEntity.getProperties().put("ZmotifAutres", new ODataPropertyDefaultImpl("ZmotifAutres", ""));
+                newEntity.getProperties().put("Zstatut_cl", new ODataPropertyDefaultImpl("Zstatut_cl", statut_cl));
 
                 batchItem.setPayload(newEntity);
                 //batchItem.setPayload(newEntity2);
@@ -1907,13 +1874,10 @@ public class MainCL extends AppCompatActivity {
                             Toast.makeText(ctx, "Les envois sont envoyés avec succès", Toast.LENGTH_SHORT).show();
 
 
-                            if((!designation.isEmpty()) && list==null)
-                            {
-                                db.updateStatut(CL.getNum_client(),"Non Traité",heure,CL.getNum_fdr());
-                            }
-                            else if (designation.isEmpty() && list.size()!=0)
-                            {
-                                db.updateStatut(CL.getNum_client(),"Traité",heure,CL.getNum_fdr());
+                            if ((!designation.isEmpty()) && list == null) {
+                                db.updateStatut(CL.getNum_client(), "Non Traité", heure, CL.getNum_fdr());
+                            } else if (designation.isEmpty() && list.size() != 0) {
+                                db.updateStatut(CL.getNum_client(), "Traité", heure, CL.getNum_fdr());
 
                             }
 
@@ -1966,80 +1930,74 @@ public class MainCL extends AppCompatActivity {
 
     }
 
-/*****************************************************************************/
+    /*****************************************************************************/
 
 
+    public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, String motifID, String designation, String nbenvoi, Context ac) {
 
 
+        db = new SQLiteHandler(ctx);
+
+        Agency1 agen = null;
+        ODataResponse oDataResponse = null;
+
+        CredentialsProvider1 credProvider = CredentialsProvider1
+                .getInstance(lgtx, login, pwd);
+
+        HttpConversationManager manager = new CommonAuthFlowsConfigurator(
+                ctx).supportBasicAuthUsing(credProvider).configure(
+                new HttpConversationManager(ctx));
 
 
-public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, String motifID, String designation, String nbenvoi, Context ac)
-
-{
-
-
-    db = new SQLiteHandler(ctx);
-
-    Agency1 agen = null;
-    ODataResponse oDataResponse = null;
-
-    CredentialsProvider1 credProvider = CredentialsProvider1
-            .getInstance(lgtx, login, pwd);
-
-    HttpConversationManager manager = new CommonAuthFlowsConfigurator(
-            ctx).supportBasicAuthUsing(credProvider).configure(
-            new HttpConversationManager(ctx));
+        XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
+        XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(ctx, requestFilter);
+        manager.addFilter(requestFilter);
+        manager.addFilter(responseFilter);
+        URL url = null;
 
 
-    XCSRFTokenRequestFilter requestFilter = XCSRFTokenRequestFilter.getInstance(lgtx);
-    XCSRFTokenResponseFilter responseFilter = XCSRFTokenResponseFilter.getInstance(ctx, requestFilter);
-    manager.addFilter(requestFilter);
-    manager.addFilter(responseFilter);
-    URL url = null;
+        try {
+            url = new URL(url_g);
+            //   url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            //    url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        OnlineODataStore store = null;
 
 
-    try {
-        url = new URL(url_g);
-     //   url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-    //    url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-    } catch (MalformedURLException e) {
-        e.printStackTrace();
-    }
-    OnlineODataStore store = null;
+        try {
+            store = OnlineODataStore.open(ctx, url, manager, null);
+        } catch (ODataException e) {
+            e.printStackTrace();
+            Log.e("e0", e.toString());
+        }
+
+        ODataRequestParamBatch requestParamBatch = new ODataRequestParamBatchDefaultImpl();
+        ODataEntity newEntity = new ODataEntityDefaultImpl("Z_ODATA_BAM2_SRV.ZSD_FDR_ENVOIS");
+
+        ODataRequestParamSingle batchItem = new ODataRequestParamSingleDefaultImpl();
+
+        batchItem.setResourcePath("ZSD_FDR_ENVOISSet");
 
 
-    try {
-        store = OnlineODataStore.open(ctx, url, manager, null);
-    } catch (ODataException e) {
-        e.printStackTrace();
-        Log.e("e0", e.toString());
-    }
+        batchItem.setMode(ODataRequestParamSingle.Mode.Create);
 
-    ODataRequestParamBatch requestParamBatch = new ODataRequestParamBatchDefaultImpl();
-    ODataEntity newEntity = new ODataEntityDefaultImpl("Z_ODATA_BAM2_SRV.ZSD_FDR_ENVOIS");
-
-    ODataRequestParamSingle batchItem = new ODataRequestParamSingleDefaultImpl();
-
-    batchItem.setResourcePath("ZSD_FDR_ENVOISSet");
-
-
-    batchItem.setMode(ODataRequestParamSingle.Mode.Create);
-
-    batchItem.setCustomTag("something to identify the request");
+        batchItem.setCustomTag("something to identify the request");
 
 
         newEntity.getProperties().put("ZfdrId", new ODataPropertyDefaultImpl("ZfdrId", CL.getNum_fdr()));
         newEntity.getProperties().put("Zposnr", new ODataPropertyDefaultImpl("Zposnr", CL.getNum_poste()));
         newEntity.getProperties().put("Kunnr", new ODataPropertyDefaultImpl("Kunnr", CL.getNum_client()));
-        newEntity.getProperties().put("ZcodeEnvoi", new ODataPropertyDefaultImpl("ZcodeEnvoi",""));
+        newEntity.getProperties().put("ZcodeEnvoi", new ODataPropertyDefaultImpl("ZcodeEnvoi", ""));
         newEntity.getProperties().put("ZheureTr", new ODataPropertyDefaultImpl("ZheureTr", heure));
-        newEntity.getProperties().put("ZnbEnvois", new ODataPropertyDefaultImpl("ZnbEnvois",nbenvoi));
-        newEntity.getProperties().put("ZmotifAutres", new ODataPropertyDefaultImpl("ZmotifAutres",designation));
+        newEntity.getProperties().put("ZnbEnvois", new ODataPropertyDefaultImpl("ZnbEnvois", nbenvoi));
+        newEntity.getProperties().put("ZmotifAutres", new ODataPropertyDefaultImpl("ZmotifAutres", designation));
 //MODIF 27/01/2021{
-        newEntity.getProperties().put("Zstatut_cl", new ODataPropertyDefaultImpl("Zstatut_cl","T"));
+        newEntity.getProperties().put("Zstatut_cl", new ODataPropertyDefaultImpl("Zstatut_cl", "T"));
 //MODIF 27/01/2021}
 
-    batchItem.setPayload(newEntity);
+        batchItem.setPayload(newEntity);
         //batchItem.setPayload(newEntity2);
 
 
@@ -2091,117 +2049,104 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
         }
 
 
-
-
-    Map<ODataResponse.Headers, String> headerMap = oDataResponse.getHeaders();
-    Log.e("1", "16");
-
-    if (headerMap != null) {
+        Map<ODataResponse.Headers, String> headerMap = oDataResponse.getHeaders();
         Log.e("1", "16");
-        String code = headerMap.get(ODataResponse.Headers.Code);
-        Log.e("1", "17");
-    }
+
+        if (headerMap != null) {
+            Log.e("1", "16");
+            String code = headerMap.get(ODataResponse.Headers.Code);
+            Log.e("1", "17");
+        }
 
 // Get batch response
 
-    if (oDataResponse instanceof ODataResponseBatchDefaultImpl) {
-        Log.e("1", "18");
-        ODataResponseBatch batchResponse = (ODataResponseBatch) oDataResponse;
-        Log.e("1", "19");
-        List<ODataResponseBatchItem> responses = batchResponse.getResponses();
-        Log.e("1", "20");
-        for (ODataResponseBatchItem response : responses) {
-            Log.e("1", "21");
-            // Check if batch item is a change set
+        if (oDataResponse instanceof ODataResponseBatchDefaultImpl) {
+            Log.e("1", "18");
+            ODataResponseBatch batchResponse = (ODataResponseBatch) oDataResponse;
+            Log.e("1", "19");
+            List<ODataResponseBatchItem> responses = batchResponse.getResponses();
+            Log.e("1", "20");
+            for (ODataResponseBatchItem response : responses) {
+                Log.e("1", "21");
+                // Check if batch item is a change set
 
-            if (response instanceof ODataResponseChangeSetDefaultImpl) {
-                Log.e("1", "22");
-                ODataResponseChangeSetDefaultImpl changesetResponse = (ODataResponseChangeSetDefaultImpl) response;
-                Log.e("1", "23");
-                List<ODataResponseSingle> singles = changesetResponse.getResponses();
-                Log.e("1", "24");
-                for (ODataResponseSingle singleResponse : singles) {
-                    Log.e("1", "25");
-                    // Get Custom tag
+                if (response instanceof ODataResponseChangeSetDefaultImpl) {
+                    Log.e("1", "22");
+                    ODataResponseChangeSetDefaultImpl changesetResponse = (ODataResponseChangeSetDefaultImpl) response;
+                    Log.e("1", "23");
+                    List<ODataResponseSingle> singles = changesetResponse.getResponses();
+                    Log.e("1", "24");
+                    for (ODataResponseSingle singleResponse : singles) {
+                        Log.e("1", "25");
+                        // Get Custom tag
 
-                    String customTag = singleResponse.getCustomTag();
+                        String customTag = singleResponse.getCustomTag();
 
-                    // Get http status code for individual responses
+                        // Get http status code for individual responses
 
-                    headerMap = singleResponse.getHeaders();
+                        headerMap = singleResponse.getHeaders();
 
-                    String code = headerMap.get(ODataResponse.Headers.Code);
-
-
-                    if (code.equalsIgnoreCase("201")) {
-                        Toast.makeText(ctx, "Les envois sont envoyés avec succès", Toast.LENGTH_SHORT).show();
+                        String code = headerMap.get(ODataResponse.Headers.Code);
 
 
-
-                            db.updateStatut(CL.getNum_client(),"Traité",heure,CL.getNum_fdr());
-
-
-
-                        Intent intent = new Intent();
-                        intent.setClass(ctx, CollecteListActivity.class);
-                        ac.startActivity(intent);
+                        if (code.equalsIgnoreCase("201")) {
+                            Toast.makeText(ctx, "Les envois sont envoyés avec succès", Toast.LENGTH_SHORT).show();
 
 
+                            db.updateStatut(CL.getNum_client(), "Traité", heure, CL.getNum_fdr());
 
 
-                    } else {
-                        Toast.makeText(ctx, "une Erreur est survenue ", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent();
+                            intent.setClass(ctx, CollecteListActivity.class);
+                            ac.startActivity(intent);
 
-
-                    }
-
-                    Log.e("1", "26");
-                    // Get individual response
-
-                    ODataPayload payload = singleResponse.getPayload();
-
-                    if (payload != null) {
-
-                        if (payload instanceof ODataError) {
-
-                            ODataError oError = (ODataError) payload;
-
-                            String uiMessage = oError.getMessage();
 
                         } else {
+                            Toast.makeText(ctx, "une Erreur est survenue ", Toast.LENGTH_SHORT).show();
 
-                            // TODO do something with payload
+
+                        }
+
+                        Log.e("1", "26");
+                        // Get individual response
+
+                        ODataPayload payload = singleResponse.getPayload();
+
+                        if (payload != null) {
+
+                            if (payload instanceof ODataError) {
+
+                                ODataError oError = (ODataError) payload;
+
+                                String uiMessage = oError.getMessage();
+
+                            } else {
+
+                                // TODO do something with payload
+
+                            }
 
                         }
 
                     }
 
+                } else {
+
+                    // TODO Check if batch item is a single READ request
+
                 }
 
-            } else {
-
-                // TODO Check if batch item is a single READ request
-
             }
-
+            Log.e("1", "27");
         }
-        Log.e("1", "27");
+
+
     }
-
-
-}
 
     /********************* insert off line*************************/
 
 
-
-
-
-
-    public void Insertoffline()
-
-    {
-
+    public void Insertoffline() {
 
 
         db = new SQLiteHandler(getApplicationContext());
@@ -2241,8 +2186,8 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
 
         try {
             url = new URL(url_g);
-          //  url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-           // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            //  url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+            // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -2264,7 +2209,6 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
         batchItem.setResourcePath("ZSD_FDR_ENVOISSet");
 
 
-
         batchItem.setMode(ODataRequestParamSingle.Mode.Create);
 
         batchItem.setCustomTag("something to identify the request");
@@ -2277,14 +2221,13 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
 
-
                 newEntity.getProperties().put("ZfdrId", new ODataPropertyDefaultImpl("ZfdrId", cursor.getString(1)));
                 newEntity.getProperties().put("Zposnr", new ODataPropertyDefaultImpl("Zposnr", cursor.getString(2)));
                 newEntity.getProperties().put("Kunnr", new ODataPropertyDefaultImpl("Kunnr", cursor.getString(3)));
                 newEntity.getProperties().put("ZcodeEnvoi", new ODataPropertyDefaultImpl("ZcodeEnvoi", cursor.getString(18)));
                 newEntity.getProperties().put("ZnbEnvois", new ODataPropertyDefaultImpl("ZnbEnvois", cursor.getString(19)));
-                newEntity.getProperties().put("ZheureTr", new ODataPropertyDefaultImpl("ZheureTr",cursor.getString(15)));
-                newEntity.getProperties().put("ZmotifAutres", new ODataPropertyDefaultImpl("ZmotifAutres",cursor.getString(17)));
+                newEntity.getProperties().put("ZheureTr", new ODataPropertyDefaultImpl("ZheureTr", cursor.getString(15)));
+                newEntity.getProperties().put("ZmotifAutres", new ODataPropertyDefaultImpl("ZmotifAutres", cursor.getString(17)));
 
                 batchItem.setPayload(newEntity);
                 //batchItem.setPayload(newEntity2);
@@ -2429,15 +2372,7 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
     }
 
 
-
-
-
-
     /************** web service pour chargement des clients de la collecte ***************/////
-
-
-
-
     public void Client_collecte() {
 
 
@@ -2466,9 +2401,6 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-
-
 
 
                         }
@@ -2510,8 +2442,8 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
 
                         try {
                             url = new URL(url_g);
-                       //     url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
-                           // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                            //     url = new URL("http://194.204.220.65:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
+                            // url = new URL("http://172.10.10.116:8001/sap/opu/odata/sap/Z_ODATA_BAM2_SRV");
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
 
@@ -2542,7 +2474,6 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
 
 
                             ODataResponseSingle resp1 = null;
-
 
 
                             try {
@@ -2592,26 +2523,13 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
                                     }
 
 
-
-
-
-
                                 }
-
-
-
 
 
                             }
 
 
-
-
                             /*******************************/
-
-
-
-
 
 
                             try {
@@ -2658,24 +2576,10 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
                                     }
 
 
-
-
-
-
                                 }
 
 
-
-
-
                             }
-
-
-
-
-
-
-
 
 
                         }
@@ -2685,15 +2589,12 @@ public static void InsertENVOI1(final Context ctx, Collecte CL, String heure, St
                 });
 
 
-
             }
 
 
         });
 
     }
-
-
 
 
 }

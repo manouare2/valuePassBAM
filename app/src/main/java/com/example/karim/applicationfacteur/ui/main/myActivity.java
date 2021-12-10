@@ -1,5 +1,7 @@
 package com.example.karim.applicationfacteur.ui.main;
 
+import static android.Manifest.permission.CAMERA;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Fragment;
@@ -11,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -20,9 +23,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
@@ -53,6 +59,7 @@ import com.example.karim.applicationfacteur.ui.online.CollecteListActivity;
 import com.example.karim.applicationfacteur.ui.online.CollecteListFragment;
 import com.example.karim.applicationfacteur.ui.online.SQLiteHandler;
 import com.example.karim.applicationfacteur.ui.online.Scangrp;
+import com.example.karim.applicationfacteur.utils.Constant;
 import com.facebook.network.connectionclass.ConnectionClassManager;
 import com.facebook.network.connectionclass.ConnectionQuality;
 import com.facebook.network.connectionclass.DeviceBandwidthSampler;
@@ -211,14 +218,39 @@ public class myActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constant.CAMERA_PERMISSION_REQUEST_CODE
+                && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            this.willStartCameraIntent();
+        }
+    }
+
+    private boolean checkCameraPermission() {
+        return (ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{CAMERA}, Constant.CAMERA_PERMISSION_REQUEST_CODE);
+    }
+
+    private void willStartCameraIntent() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        startActivity(intent);
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.menu_item_dec)
             return deconnexion(this);
 
         else if (item.getItemId() == R.id.menu_item_photo) {
-            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-            startActivity(intent);
+            if (this.checkCameraPermission()) {
+                this.willStartCameraIntent();
+            } else // request camera permission
+                this.requestCameraPermission();
             return true;
         } else if (item.getItemId() == R.id.menu_item_scan) {
 
