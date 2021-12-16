@@ -1,55 +1,52 @@
 package com.example.karim.applicationfacteur.ui.main;
 
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-        import android.os.Build;
-        import android.os.Environment;
-        import android.support.annotation.RequiresApi;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
+import com.example.karim.applicationfacteur.R;
 
-        import android.graphics.Canvas;
-        import android.graphics.Color;
-        import android.graphics.Paint;
-        import android.graphics.pdf.PdfDocument;
-        import android.os.Bundle;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.Toast;
-
-        import com.example.karim.applicationfacteur.R;
-
-        import java.io.File;
-        import java.io.FileOutputStream;
-        import java.io.IOException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 public class PDF extends AppCompatActivity {
 
     Button btnCreate;
-    EditText editText,editText2;
+    EditText editText, editText2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pdflayout);
 
-        btnCreate = (Button)findViewById(R.id.create);
-        editText =(EditText) findViewById(R.id.edittext);
-        editText2 =(EditText) findViewById(R.id.edittext2);
+        btnCreate = (Button) findViewById(R.id.create);
+        editText = (EditText) findViewById(R.id.edittext);
+        editText2 = (EditText) findViewById(R.id.edittext2);
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View view) {
-                createPdf(editText.getText().toString(),editText2.getText().toString());
+                createPdf(editText.getText().toString(), editText2.getText().toString());
             }
         });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void createPdf(String title,String description){
+    private void createPdf(String title, String description) {
         // create a new document
         PdfDocument document = new PdfDocument();
         // crate a page description
@@ -77,13 +74,13 @@ public class PDF extends AppCompatActivity {
         if (!file.exists()) {
             file.mkdirs();
         }
-        String targetPdf = directory_path+"DATA"+".pdf";
+        String targetPdf = directory_path + "DATA" + ".pdf";
         File filePath = new File(targetPdf);
         try {
             document.writeTo(new FileOutputStream(filePath));
             Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
-            Log.e("main", "error "+e.toString());
+            Log.e("main", "error " + e.toString());
             Toast.makeText(this, "Something wrong: " + e.toString(),
                     Toast.LENGTH_LONG).show();
         }

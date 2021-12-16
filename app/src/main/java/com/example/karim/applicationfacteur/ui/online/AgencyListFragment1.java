@@ -715,17 +715,21 @@ public class AgencyListFragment1 extends Fragment implements LoaderManager.Loade
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // recherche
-                livresAdapter.filter(charSequence.toString());
-                nonlivresAdapter.filter(charSequence.toString());
-                aviseAdapter.filter(charSequence.toString());
-                encoursAdapter.filter(charSequence.toString());
+                if (livresAdapter != null && nonlivresAdapter != null && aviseAdapter != null
+                && encoursAdapter != null) {
+                    livresAdapter.filter(charSequence.toString());
+                    nonlivresAdapter.filter(charSequence.toString());
+                    aviseAdapter.filter(charSequence.toString());
+                    encoursAdapter.filter(charSequence.toString());
 
-                changeToggleText();
+                    changeToggleText();
 
-                btnEncours.setChecked(true);
-                btnLivres.setChecked(false);
-                btnNonLivres.setChecked(false);
-                btnavisé.setChecked(false);
+                    btnEncours.setChecked(true);
+                    btnLivres.setChecked(false);
+                    btnNonLivres.setChecked(false);
+                    btnavisé.setChecked(false);
+                }
+
 
             }
 

@@ -24,6 +24,8 @@ public class Agency3 implements Parcelable{
     private String agc;
     private String adr_agc;
     private String obj;
+    private String obj1;
+    private String stat;
 
     public String getObj1() {
         return obj1;
@@ -33,12 +35,7 @@ public class Agency3 implements Parcelable{
         this.obj1 = obj1;
     }
 
-    private String obj1;
 
-
-
-
-    private String stat;
 
 
     public String getTelephone_exp() {
@@ -196,6 +193,17 @@ public class Agency3 implements Parcelable{
 
 
 
+    public String getStat() {
+        return stat;
+    }
+
+    public void setStat(String stat) {
+        this.stat = stat;
+    }
+
+
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -222,13 +230,8 @@ public class Agency3 implements Parcelable{
         dest.writeString(this.obj);
         dest.writeString(this.obj1);
         dest.writeString(this.telephone_exp);
-
-
-
-
-
-
         dest.writeString(this.editResourceURL);
+        dest.writeString(this.stat);
 
     }
 
@@ -253,9 +256,8 @@ public class Agency3 implements Parcelable{
         this.obj = in.readString();
         this.obj1 = in.readString();
         this.telephone_exp= in.readString();
-
-
         this.editResourceURL = in.readString();
+        this.stat = in.readString();
 
     }
 
@@ -273,14 +275,5 @@ public class Agency3 implements Parcelable{
             return new Agency3[size];
         }
     };
-
-    public String getStat() {
-        return stat;
-    }
-
-    public void setStat(String stat) {
-        this.stat = stat;
-    }
-
 
 }
